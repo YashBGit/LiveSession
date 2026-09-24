@@ -648,16 +648,18 @@ body[data-live="on"] main>.stage h2[tabindex="-1"]:focus{outline:none;box-shadow
  body[data-live="on"] main>.stage h2{font-size:13pt!important}
 }
 
+
+body[data-focus="on"]:not([data-live="on"]):has(main>.stage:last-of-type.current) .independent-section,body[data-focus="on"]:not([data-live="on"]):has(main>.stage:last-of-type.current) .footer{display:block}
 </style>
 </head>
 <body data-live="off" data-focus="on" data-motion="off" data-size="standard" data-spacing="standard" data-theme="light">
 <a class="skip" href="#main">Skip to teaching content</a>
 <div class="shell">
 <header>
-<div class="eyebrow"> Level 4 · Software Testing and Quality Assurance · 20-minute session</div>
+<div class="eyebrow">Level 4 · Software Testing and Quality Assurance · 20-minute session</div>
 <h1>From Requirements to Reliable Software</h1>
 <p class="lead">Testing, verification, validation and Test-Driven Development, with one worked example throughout: a familiar login page. Security runs through every stage.</p>
-<div class="pillrow"><span class="pill">Level 5 · three learning outcomes</span><span class="pill">Requirement → test → evidence</span><span class="pill">Secure by design</span><span class="pill">No account or installation</span></div>
+<div class="pillrow"><span class="pill">Level 4 · three learning outcomes</span><span class="pill">Requirement → test → evidence</span><span class="pill">Secure by design</span><span class="pill">No account or installation</span></div>
 <p class="micro">Dr Yashar Baradaranshokouhi. Press <strong>Start full-screen presentation</strong> to present one slide at a time; use the arrow keys to move and Esc to exit. Take part by speaking, typing, discussing with a neighbour, or thinking silently. Every visual has a written description.</p>
 </header>
 <section aria-labelledby="access-title" class="settings">
@@ -808,8 +810,9 @@ def is_valid_password(password):
 <article class="tile"><h3>TDD</h3><p>Testing moved into development: red, green, refactor.</p></article>
 </div>
 <div class="callout caution"><strong>And a system that appears to work is not necessarily a system that is secure.</strong></div>
-<div class="callout success"><strong>Next:</strong> a lab where you write these tests in pytest and run them in a GitHub CI pipeline. Later, at Levels 6 and 7: static analysis, threat modelling and formal verification.</div>
-<p class="prompt">Say it back: in one sentence, what is the difference between verification and validation?</p></section>
+<div class="callout success"><strong>Next:</strong> a lab where you write these tests in pytest and run them in a GitHub CI pipeline. Later, at Levels 5 and 6: static analysis, threat modelling and formal verification.</div>
+<p class="prompt">Say it back: in one sentence, what is the difference between verification and validation?</p>
+<p class="screenonly"><a class="buttonlink" href="#independent">After the session: practice task and extension activities, including SQL injection ↓</a></p></section>
 </main>
 <section aria-labelledby="independent-title" class="independent-section" id="independent">
 <div class="topline"><h2 id="independent-title">After the session · practise and explore</h2><span class="pill">Independent study</span></div>
@@ -818,6 +821,52 @@ def is_valid_password(password):
 <div class="industry-audit"><h3>Human review: did the AI miss anything?</h3><p>An AI assistant wrote only one test and says: “The password rule is done.”</p><pre>def test_short_password_rejected():
     assert is_valid_password("abc123") is False</pre>
 <div class="quizbox"><form class="quiz" id="aiForm" data-name="ai" data-answer="b" data-good="Correct. One passing test covers one case. Add the acceptance and boundary tests, and remember security needs its own test. The engineer owns the requirement, the missing cases and the accountability." data-bad="Not yet. A single passing test says nothing about the cases it does not cover. Expected results come from the requirement, not from the code."><fieldset><legend>What should the human reviewer do?</legend><label class="option"><input name="ai" type="radio" value="a"/> Accept it: the test passes, so the rule is done.</label><label class="option"><input name="ai" type="radio" value="b"/> Add the missing cases: an eight-character password is accepted, a boundary case, and a REQ-06 security test. Then run them.</label><label class="option"><input name="ai" type="radio" value="c"/> Change the expected result to match whatever the code returns.</label></fieldset><button type="submit">Check my answer</button></form><div aria-atomic="true" aria-live="polite" class="feedback" id="aiFeedback" role="status"></div></div></div>
+<div class="industry-audit" id="sqliActivity" aria-labelledby="sqliTitle"><h3 id="sqliTitle">Extension: SQL injection (15 minutes)</h3>
+<p>The login page sends your email and password to the server, which looks you up in a database with an SQL query. If the server builds that query by <strong>joining your text into the SQL</strong>, what you type can change the meaning of the query. This is <strong>SQL injection</strong>, one of the most common security flaws in real login systems.</p>
+<p class="micro">This is a safe simulation. There is no real database, and nothing leaves your browser. Practise only here or on your own practice projects: trying this on systems you do not own or have permission to test is illegal in the UK under the Computer Misuse Act 1990.</p>
+<div class="two">
+<div class="tile"><h3>1 · Try to log in</h3>
+<p class="micro">The pretend database has two users, <code>alice@example.com</code> and <code>bob@example.com</code>. You do not know their passwords.</p>
+<form id="sqliForm">
+<label for="sqliEmail">Email</label><input id="sqliEmail" type="text" autocomplete="off" spellcheck="false" value="alice@example.com"/>
+<label for="sqliPassword">Password (shown as text for this exercise)</label><input id="sqliPassword" type="text" autocomplete="off" spellcheck="false" value="guess123"/>
+<fieldset><legend>How does the server build the query?</legend>
+<label class="option"><input name="sqliMode" type="radio" value="unsafe" checked/> Unsafe: joins the text into the SQL</label>
+<label class="option"><input name="sqliMode" type="radio" value="safe"/> Safe: parameterised query (input passed separately as data)</label>
+</fieldset>
+<button class="primary" type="submit">Try to log in</button>
+</form>
+<p class="micro" style="margin-top:12px"><strong>Quick inputs to try:</strong></p>
+<div class="actions">
+<button type="button" data-sqli-email="alice@example.com" data-sqli-pw="guess123">Wrong password</button>
+<button type="button" data-sqli-email="alice@example.com" data-sqli-pw="' OR '1'='1">Password: ' OR '1'='1</button>
+<button type="button" data-sqli-email="alice@example.com'--" data-sqli-pw="anything">Email: alice@example.com'--</button>
+</div></div>
+<div class="tile"><h3>2 · What the server runs</h3>
+<pre id="sqliQuery" aria-label="The query the server runs">Press “Try to log in” to see the query.</pre>
+<div aria-atomic="true" aria-live="polite" class="feedback" id="sqliResult" role="status"></div>
+<details class="details"><summary>Why does ' OR '1'='1 work?</summary><p>Your quote mark <code>'</code> closes the password text early. The rest, <code>OR '1'='1</code>, becomes part of the SQL. Since <code>'1'='1'</code> is always true, the whole condition is true and the database returns a user, even though the password is wrong. In the email example, <code>--</code> starts an SQL comment, so the password check is ignored completely.</p></details>
+</div></div>
+<h3>3 · Choose the fix</h3>
+<div class="quizbox"><form class="quiz" id="sqlfixForm" data-name="sqlfix" data-answer="param" data-good="Correct. A parameterised query sends the SQL and the input separately, so the database always treats the input as data. No quote mark in the input can change the query." data-bad="Not quite. Browser checks can be skipped and hiding the field changes nothing on the server. The fix is a parameterised query, so input is always treated as data."><fieldset><legend>Which change stops SQL injection?</legend><label class="option"><input name="sqlfix" type="radio" value="hide"/> Hide the password field so attackers cannot type in it</label><label class="option"><input name="sqlfix" type="radio" value="js"/> Block quote marks with JavaScript in the browser</label><label class="option"><input name="sqlfix" type="radio" value="param"/> Use a parameterised query on the server</label></fieldset><button type="submit">Check my answer</button></form><div aria-atomic="true" aria-live="polite" class="feedback" id="sqlfixFeedback" role="status"></div></div>
+<h3>4 · Write the test</h3>
+<p>Security requirements are testable, just like REQ-05. Add a new requirement and a test that fails on the unsafe version and passes on the safe one:</p>
+<pre aria-label="A pytest test for SQL injection">
+# REQ-07: user input shall be treated as data, never as part of an SQL query
+def test_sql_injection_login_rejected():
+    assert login("alice@example.com", "' OR '1'='1") is False
+
+def test_comment_injection_login_rejected():
+    assert login("alice@example.com'--", "anything") is False</pre>
+<div class="callout success"><strong>The fix in Python:</strong> never build SQL with f-strings or <code>+</code>. Pass the values separately with placeholders:<pre aria-label="Unsafe and safe Python queries">
+# Unsafe: input becomes part of the SQL
+cur.execute(f"SELECT * FROM users WHERE email = '{email}' AND password = '{pw}'")
+
+# Safe: input is passed as data
+cur.execute("SELECT * FROM users WHERE email = ? AND password = ?", (email, pw))</pre>
+<p class="micro">Simplified for teaching: a real system stores a salted password hash, never the password itself, and checks the hash on the server.</p></div>
+<div class="security-thread compact-thread" role="note"><span aria-hidden="true" class="thread-icon">◆</span><div><strong>Link to the session:</strong> checking input in the browser JavaScript does not fix this. The attacker can skip the browser entirely, just as with REQ-06. The protection must be on the server.</div></div>
+</div>
 <p class="micro"><strong>Progression:</strong> the same requirement-to-evidence method applies later to automated regression suites, security requirements, DevSecOps pipelines, traceability and formal verification.</p></section>
 <section aria-labelledby="implementation" class="footer"><h2 id="implementation">Accessibility notes and sources</h2>
 <div class="two"><div><h3>Inclusive design</h3><p>Choose a colour theme (colourful, calm, dark or high contrast), larger text, wider spacing, a one-stage-at-a-time focus view and reduced motion. Settings apply only to this open page and send no data. You can take part by speaking, typing, discussing with a neighbour or thinking silently. Every visual has a written description, all activities work without an internet connection, and the whole session can be printed or saved as a PDF.</p></div>
@@ -829,7 +878,7 @@ def is_valid_password(password):
 <li><a href="https://www.w3.org/TR/WCAG22/" rel="noopener noreferrer" target="_blank">W3C, WCAG 2.2<span class="sr-only"> (opens in a new tab)</span></a> and <a href="https://www.w3.org/TR/coga-usable/" rel="noopener noreferrer" target="_blank">Making Content Usable for People with Cognitive and Learning Disabilities<span class="sr-only"> (opens in a new tab)</span></a></li>
 <li><a href="https://doi.org/10.1007/BF00138871" rel="noopener noreferrer" target="_blank">Biggs (1996), Enhancing teaching through constructive alignment<span class="sr-only"> (opens in a new tab)</span></a></li>
 </ol></div></div>
-<p class="micro">Dr Yashar Baradaranshokouhi · Software Engineering · Level 5. Code examples are simplified teaching constructs.</p></section>
+<p class="micro">Dr Yashar Baradaranshokouhi · Software Engineering · Level 4. Code examples are simplified teaching constructs.</p></section>
 <noscript><p class="nojs">JavaScript is disabled. You can still read the full session and worked examples. Interactive checks, navigation buttons and the test runner need JavaScript enabled.</p></noscript>
 </div>
 <button aria-label="Return to accessibility and display settings" class="prefs-shortcut" hidden="" id="prefsShortcut" title="Go to settings" type="button">
@@ -988,6 +1037,48 @@ document.getElementById('runFalse').addEventListener('click',()=>run('alwaysFals
 document.getElementById('runLen').addEventListener('click',()=>run('length'));
 document.getElementById('reset').addEventListener('click',()=>{if(body.dataset.live==='on')exitPresentation();quizzes.forEach(f=>{f.reset();const fb=document.getElementById(f.dataset.name+'Feedback');fb.textContent='';fb.className='feedback';});const rf=document.getElementById('runnerFeedback');rf.textContent='Not run yet. Predict first, then run.';rf.className='feedback';document.getElementById('runnerAnnouncement').textContent='Activities have been reset.';for(const [id,key,d] of [['theme','theme','light'],['fontsize','size','standard'],['spacing','spacing','standard'],['focus','focus','on'],['motion','motion','off']]){document.getElementById(id).value=d;body.dataset[key]=d;}setStage(0);document.querySelector('header').scrollIntoView({behavior:'auto'});setRouteExpanded(false);updatePinnedRoute();});
 setStage(0);
+})();
+</script>
+<script>
+(()=>{'use strict';
+const USERS=[{email:'alice@example.com',password:'Sunflower42!'},{email:'bob@example.com',password:'Autumn#2026'}];
+function tokenize(s){const t=[];let i=0;while(i<s.length){const c=s[i];
+ if(/\s/.test(c)){i++;continue;}
+ if(c==='-'&&s[i+1]==='-')break;
+ if(c===';')break;
+ if(c==="'"){let v='';i++;let closed=false;while(i<s.length){if(s[i]==="'"){if(s[i+1]==="'"){v+="'";i+=2;continue;}closed=true;i++;break;}v+=s[i++];}
+  if(!closed)throw new Error('unterminated text: a quote mark was opened but never closed');t.push({k:'lit',v});continue;}
+ if(/[0-9]/.test(c)){let v='';while(i<s.length&&/[0-9]/.test(s[i]))v+=s[i++];t.push({k:'lit',v});continue;}
+ if(/[A-Za-z_]/.test(c)){let v='';while(i<s.length&&/[A-Za-z0-9_]/.test(s[i]))v+=s[i++];const u=v.toUpperCase();t.push(u==='AND'||u==='OR'?{k:u}:{k:'col',v:v.toLowerCase()});continue;}
+ if(c==='='){t.push({k:'='});i++;continue;}
+ if(c==='<'&&s[i+1]==='>'){t.push({k:'<>'});i+=2;continue;}
+ throw new Error('unexpected character '+c);}
+ return t;}
+function parse(tokens){let i=0;const peek=()=>tokens[i];
+ function operand(){const t=tokens[i++];if(!t||(t.k!=='lit'&&t.k!=='col'))throw new Error('incomplete condition');if(t.k==='col'&&t.v!=='email'&&t.v!=='password')throw new Error('unknown column '+t.v);return t;}
+ function cmp(){const a=operand();const op=tokens[i++];if(!op||(op.k!=='='&&op.k!=='<>'))throw new Error('expected a comparison');const b=operand();return {a,op:op.k,b};}
+ function and(){const parts=[cmp()];while(peek()&&peek().k==='AND'){i++;parts.push(cmp());}return {and:parts};}
+ const ors=[and()];while(peek()&&peek().k==='OR'){i++;ors.push(and());}
+ if(i<tokens.length)throw new Error('unexpected text after the condition');return {or:ors};}
+function evalTree(tree,row){const val=o=>o.k==='col'?row[o.v]:o.v;return tree.or.some(g=>g.and.every(c=>c.op==='='?val(c.a)===val(c.b):val(c.a)!==val(c.b)));}
+const form=document.getElementById('sqliForm'),q=document.getElementById('sqliQuery'),out=document.getElementById('sqliResult');
+function show(text,cls){out.textContent=text;out.className='feedback '+cls;}
+function attempt(){const email=document.getElementById('sqliEmail').value,pw=document.getElementById('sqliPassword').value;
+ const mode=new FormData(form).get('sqliMode');
+ const genuine=USERS.find(u=>u.email===email&&u.password===pw);
+ if(mode==='safe'){q.textContent='SELECT * FROM users WHERE email = ? AND password = ?\n\nValues sent separately, as data:\n  email    = '+JSON.stringify(email)+'\n  password = '+JSON.stringify(pw);
+  if(genuine)show('Logged in as '+genuine.email+' with the correct password.','good');
+  else show('Login rejected. The input was compared as plain text, so the quote marks and SQL words had no effect. The parameterised query is safe.','good');return;}
+ const where="email = '"+email+"' AND password = '"+pw+"'";
+ q.textContent='SELECT * FROM users\nWHERE '+where;
+ let tree;try{tree=parse(tokenize(where));}catch(e){show('Database error: '+e.message+'. The input broke the SQL. Attackers use errors like this to learn how a query is built, so real systems should never show them to users.','bad');return;}
+ const hit=USERS.find(u=>evalTree(tree,u));
+ if(!hit){show('Login rejected: no user matched.','good');return;}
+ if(genuine&&hit.email===genuine.email){show('Logged in as '+hit.email+' with the correct password.','good');return;}
+ show('Logged in as '+hit.email+' WITHOUT the correct password. Your input changed the meaning of the SQL query: this is SQL injection. Now switch to the safe, parameterised version and try the same input.','bad');}
+form.addEventListener('submit',e=>{e.preventDefault();attempt();});
+document.querySelectorAll('[data-sqli-email]').forEach(b=>b.addEventListener('click',()=>{document.getElementById('sqliEmail').value=b.dataset.sqliEmail;document.getElementById('sqliPassword').value=b.dataset.sqliPw;attempt();}));
+document.getElementById('reset').addEventListener('click',()=>{form.reset();q.textContent='Press “Try to log in” to see the query.';out.textContent='';out.className='feedback';});
 })();
 </script>
 </body>
