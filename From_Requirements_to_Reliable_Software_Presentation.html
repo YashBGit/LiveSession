@@ -1,0 +1,1008 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width,initial-scale=1" name="viewport"/>
+<meta content="light dark" name="color-scheme"/>
+<title>From Requirements to Reliable Software | LJMU Level 5</title>
+<style>
+:root{--bg:#f4f6fb;--panel:#fff;--panel2:#eaf0f9;--ink:#15263e;--muted:#41546b;--border:#64748b;--accent:#164c9c;--accentText:#fff;--good:#07633a;--bad:#a22132;--focus:#963f00;--code:#10243b;--codeInk:#f1f6ff;--fs:16px;--lh:1.55;--measure:78ch}
+body[data-theme="dark"]{--bg:#101823;--panel:#1b2939;--panel2:#25384b;--ink:#f0f6ff;--muted:#c9d7e9;--border:#8aafc8;--accent:#8ab8ff;--accentText:#081527;--good:#83e5ab;--bad:#ff9ba6;--focus:#ffe27f;--code:#090e16;--codeInk:#f0f6ff;color-scheme:dark}
+body[data-theme="contrast"]{--bg:#000;--panel:#000;--panel2:#111;--ink:#fff;--muted:#fff;--border:#fff;--accent:#ffe45e;--accentText:#000;--good:#90ffb6;--bad:#ffa5a5;--focus:#00ffff;--code:#000;--codeInk:#fff;color-scheme:dark}
+body[data-size="large"]{--fs:20px;--lh:1.7}body[data-spacing="wide"]{--lh:1.9;--measure:62ch}
+*{box-sizing:border-box}html{scroll-behavior:auto;overflow-x:clip}body{margin:0;background:var(--bg);color:var(--ink);font:var(--fs)/var(--lh) system-ui,-apple-system,"Segoe UI",Arial,sans-serif}
+body[data-motion="off"] *,body[data-motion="off"] *::before,body[data-motion="off"] *::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+a{color:var(--accent);text-underline-offset:3px}a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible,summary:focus-visible,[tabindex="-1"]:focus-visible{outline:3px solid var(--focus);outline-offset:3px;box-shadow:0 0 0 6px var(--panel)}
+.skip{position:absolute;left:10px;top:-70px;background:var(--accent);color:var(--accentText);padding:12px;z-index:10}.skip:focus{top:10px}
+.shell{max-width:1180px;margin:auto;padding:18px clamp(12px,3vw,32px) 60px}.eyebrow{letter-spacing:.11em;text-transform:uppercase;font-weight:800;color:var(--muted);font-size:.8em}
+h1{font-size:clamp(1.8em,4vw,2.8em);line-height:1.15;margin:.2em 0}h2{font-size:1.45em;line-height:1.28;margin:.2em 0 .6em}h3{font-size:1.08em;margin:.2em 0 .4em}p,li{max-width:var(--measure)}.lead{font-size:1.08em;color:var(--muted);max-width:var(--measure)}
+header{border-bottom:2px solid var(--border);padding:18px 0 20px}.pillrow{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}.pill{display:inline-flex;border:1px solid var(--border);padding:3px 10px;border-radius:99px;font-size:.88em;font-weight:700;background:var(--panel2)}
+.settings{margin:20px 0;padding:16px;background:var(--panel);border:2px solid var(--border);border-radius:15px}.settings-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}.settings-grid div{min-width:0}.settings label{display:block;font-weight:700;font-size:.96em;margin-bottom:5px}
+select,input[type="text"],textarea{font:inherit;width:100%;padding:9px;background:var(--panel);color:var(--ink);border:2px solid var(--border);border-radius:8px}input[type="checkbox"],input[type="radio"]{accent-color:var(--accent);width:24px;height:24px;vertical-align:middle;flex:none;margin:0 8px 0 0}textarea{min-height:92px}
+button,.buttonlink{font:inherit;font-weight:700;background:var(--panel);border:2px solid var(--accent);color:var(--accent);border-radius:9px;padding:9px 14px;cursor:pointer;min-height:48px;min-width:48px;display:inline-flex;align-items:center;justify-content:center;text-decoration:none}
+button:hover,.buttonlink:hover{background:var(--panel2)}button.primary,button[aria-current="step"]{background:var(--accent);color:var(--accentText)}button:disabled{opacity:.55;cursor:not-allowed}.actions{display:flex;flex-wrap:wrap;gap:9px;margin:12px 0}.topline{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
+.timeline{background:var(--panel);border:2px solid var(--border);border-radius:15px;padding:16px;margin:15px 0}.timeline ol{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:7px;padding:0;list-style:none;margin:8px 0}.timeline li{min-width:0}.timeline button{height:100%;width:100%;font-size:.95em;text-align:left;justify-content:flex-start;align-items:flex-start;flex-direction:column;border-color:var(--border);line-height:1.35;padding:9px}.timeline button[aria-current="step"]{border-color:var(--accent)}.minute{display:block;font-size:.8em;opacity:.87;font-weight:600;margin-top:2px}
+.progress{height:9px;background:var(--panel2);border:1px solid var(--border);border-radius:9px;overflow:hidden;margin:12px 0}.progress span{display:block;background:var(--accent);height:100%;width:10%}
+.stage{margin:22px 0;background:var(--panel);border:2px solid var(--border);border-radius:16px;padding:clamp(16px,2.8vw,29px);scroll-margin-top:18px}.stagehead{display:flex;flex-wrap:wrap;gap:10px;align-items:baseline;margin-bottom:9px}.stagehead .step{font-size:.8em;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}.stagehead .time{margin-left:auto;font-weight:800;color:var(--accent)}.stage h2{margin-bottom:9px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:14px}.three{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:11px}.tile{border:1.5px solid var(--border);border-radius:11px;padding:12px;background:var(--panel2);min-width:0}.tile p:last-child{margin-bottom:0}.callout{background:var(--panel2);border-left:5px solid var(--accent);padding:12px 15px;border-radius:8px;margin:12px 0}.caution{border-left-color:var(--bad)}.success{border-left-color:var(--good)}
+.teacher{border-left:4px solid var(--focus);background:var(--panel2);padding:12px 15px;margin-top:18px;border-radius:8px}.teacher strong{display:block;margin-bottom:4px}body[data-presenter="off"] .teacher{display:none}
+.prompt{font-weight:800;font-size:1.15em}.micro{font-size:.95em;color:var(--muted)}.details{background:var(--panel2);border-radius:8px;padding:10px 14px;margin:12px 0}details summary{cursor:pointer;font-weight:700;min-height:44px;display:list-item;align-content:center}
+code,pre{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:.94em}pre{background:var(--code);color:var(--codeInk);padding:16px;border-radius:9px;white-space:pre-wrap;overflow-wrap:anywhere;max-width:100%;line-height:1.55}
+table{width:100%;border-collapse:collapse;margin:12px 0;font-size:.94em}th,td{border:1.5px solid var(--border);padding:9px;text-align:left;vertical-align:top}thead th{background:var(--panel2)}fieldset{border:1.5px solid var(--border);padding:11px;border-radius:10px;margin:12px 0}legend{font-weight:800;padding:0 6px}.option{display:flex;align-items:flex-start;gap:3px;padding:12px;margin:7px 0;border:1.5px solid var(--border);border-radius:7px;cursor:pointer;min-height:48px}.feedback{border:2px solid var(--border);padding:12px;border-radius:10px;margin:12px 0;background:var(--panel2)}.feedback:empty{padding:0;margin:0;border:0;min-height:0}.feedback.good{border-color:var(--good)}.feedback.bad{border-color:var(--bad)}.hidden{display:none!important}
+.flowline{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:13px 0}.flowline span{background:var(--panel2);border:1px solid var(--border);padding:8px;border-radius:8px;font-weight:700}.flowline .arrow{background:transparent;border:0}.answerBlock{border:2px solid var(--accent);border-radius:10px;padding:13px;margin:10px 0}.checklist label{display:block;margin:8px 0;line-height:1.4}.checkpoint{display:flex;align-items:center;gap:7px;flex-wrap:wrap}.checkpoint input{width:auto}.source{font-size:.95em;overflow-wrap:anywhere}.footer{border-top:2px solid var(--border);padding-top:18px;margin-top:25px}.nojs{padding:11px;border:2px solid var(--bad)}
+body[data-focus="on"] .stage{display:none}body[data-focus="on"] .stage.current{display:block}body[data-focus="on"] .timeline{position:static}
+@media(max-width:780px){.settings-grid,.two,.three{grid-template-columns:1fr}.timeline ol{grid-template-columns:repeat(2,minmax(0,1fr))}.stagehead .time{margin-left:0}.timeline button{font-size:.95em}}
+@media(max-width:390px){.timeline ol{grid-template-columns:1fr}}
+@media print{body{--bg:#fff;--panel:#fff;--panel2:#f2f2f2;--ink:#111;--muted:#333;--border:#666;--accent:#111;--accentText:#fff;--good:#111;--bad:#111;font-size:10pt;color:#111;background:#fff}header,.settings,.timeline,.actions,.screenonly{display:none!important}.shell{max-width:none;padding:0}.stage,body[data-focus="on"] .stage{display:block!important;break-inside:avoid;border:1px solid #777;padding:12px;margin:9px 0;box-shadow:none}.teacher,body[data-presenter="off"] .teacher{display:block!important}a{color:#111}h2{font-size:13pt}p{margin:.35em 0}pre{background:#eee;color:#111;border:1px solid #666}.footer{break-before:page}}
+
+/* Accessible, theme-aware lifecycle. Every node remains legible without JavaScript. */
+.cycle-figure{margin:15px 0;padding:clamp(12px,2vw,20px);border:2px solid var(--border);border-radius:14px;background:var(--panel2)}
+.cycle-figure h3{margin:0}.cycle-list{list-style:none;margin:12px auto;padding:0;max-width:760px}.cycle-item{list-style:none;margin:0}.cycle-node{display:flex;align-items:flex-start;gap:12px;border:2px solid var(--border);border-radius:11px;background:var(--panel);padding:12px 14px}.cycle-number{display:inline-flex;align-items:center;justify-content:center;flex:none;min-width:35px;height:35px;border-radius:50%;font-weight:800;border:2px solid var(--accent);color:var(--accent)}.cycle-node h4{font-size:1em;margin:0 0 3px}.cycle-node p{margin:0}.cycle-transition,.cycle-loop{margin:0 12px;padding:9px 14px 9px 22px;border-left:3px solid var(--accent);font-size:.92em}.cycle-transition strong,.cycle-loop strong{color:var(--accent)}.cycle-loop{border-left-style:dashed;border-bottom:2px dashed var(--accent);border-radius:0 0 0 9px;margin-top:2px}.cycle-item.is-highlighted .cycle-node{border:4px solid var(--focus);padding:10px 12px;box-shadow:0 0 0 2px var(--panel)}.cycle-item.is-highlighted .cycle-transition,.cycle-item.is-highlighted .cycle-loop{font-weight:650}.cycle-figure figcaption{margin-top:12px}.cycle-figure .actions{margin-bottom:3px}
+@media print{.cycle-figure{break-inside:auto}.cycle-item{break-inside:avoid}.cycle-item.is-highlighted .cycle-node{border:2px solid var(--border);box-shadow:none;padding:12px 14px}.cycle-list{max-width:none}.cycle-figure .actions,#cycleStatus{display:none!important}}
+
+/* WCAG 2.2 AA targeted improvements: resilient reflow, spacious targets and discernible focus. */
+:where(body,header,main,section,article,nav,footer,figure,fieldset,div,li,td,th){min-width:0}
+:where(p,li,th,td,legend,button,a,summary,label,h1,h2,h3,h4,pre,code){overflow-wrap:anywhere}
+:where(button,.buttonlink,select,input,textarea){touch-action:manipulation}
+select,input[type="text"],textarea{min-height:48px;max-width:100%;font-size:1em}
+select{padding:10px 34px 10px 10px}
+.settings label{margin-bottom:7px}
+.settings-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+.stage h2:focus{outline:3px solid var(--focus);outline-offset:5px}
+.skip{top:0;transform:translateY(-160%);max-width:calc(100vw - 20px);min-height:48px;display:inline-flex;align-items:center}
+.skip:focus{transform:none;top:10px}
+.sr-only{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip:rect(0,0,0,0)!important;white-space:nowrap!important;border:0!important}
+.stage-status-note{margin:.2em 0 0}
+.cycle-node>div{min-width:0;flex:1}
+.cycle-number{min-width:40px;height:40px}
+.cycle-item.is-highlighted .cycle-node{outline:3px solid var(--focus);outline-offset:2px}
+.test-matrix{margin:12px 0}
+.test-matrix caption{font-weight:700;text-align:left;caption-side:top;margin-bottom:8px;color:var(--ink)}
+.test-matrix th,.test-matrix td{overflow-wrap:anywhere}
+.result-cards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:12px 0}
+.result-card{background:var(--panel);border:2px solid var(--border);border-radius:10px;padding:12px;min-width:0}
+.result-card h4{margin:0 0 8px}
+.result-card dl{margin:0;display:grid;grid-template-columns:minmax(0,auto) minmax(0,1fr);column-gap:12px;row-gap:5px}
+.result-card dt{font-weight:700}.result-card dd{margin:0;overflow-wrap:anywhere}
+.result-card[data-result="pass"]{border-left:6px solid var(--good)}
+.result-card[data-result="fail"]{border-left:6px solid var(--bad)}
+@media(max-width:780px){
+ .shell{padding:12px 12px 45px}
+ .settings,.timeline,.stage{padding:14px;margin:12px 0}
+ .timeline ol{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .settings-grid,.two,.three,.result-cards{grid-template-columns:minmax(0,1fr)}
+ .actions{gap:8px}
+ .stagehead{display:block}.stagehead .step,.stagehead .time{display:block;margin:0}
+ .stagehead .time{margin-top:4px}
+ .flowline{gap:5px}.flowline span{max-width:100%}
+ .cycle-figure{padding:10px}
+ .cycle-node{padding:10px;gap:9px}
+ .cycle-transition,.cycle-loop{margin:0 4px;padding:9px 8px 9px 12px}
+}
+@media(max-width:540px){
+ .actions>button,.actions>.buttonlink{flex:1 1 100%;width:100%;white-space:normal;text-align:center}
+ .timeline ol{grid-template-columns:minmax(0,1fr)}
+ .timeline button{min-height:48px;flex-direction:row;flex-wrap:wrap;align-items:center;gap:6px;justify-content:space-between}
+ .timeline .minute{margin:0}
+ .test-matrix,.test-matrix tbody,.test-matrix tr,.test-matrix th,.test-matrix td{display:block;width:100%}
+ .test-matrix thead{position:absolute!important;width:1px!important;height:1px!important;overflow:hidden!important;clip:rect(0,0,0,0)!important;white-space:nowrap!important}
+ .test-matrix{border:0}
+ .test-matrix tbody{display:grid;gap:14px}
+ .test-matrix tr{border:2px solid var(--border);border-radius:12px;background:var(--panel2);padding:10px}
+ .test-matrix tr>*{border:0;padding:8px 4px;background:transparent}
+ .test-matrix th[scope="row"]{font-size:1.15em;border-bottom:1px solid var(--border)}
+ .test-matrix td::before{content:attr(data-label);display:block;font-weight:700;margin-bottom:4px}
+ .test-matrix td:has(select)::before{margin-bottom:7px}
+ .test-matrix select{max-width:100%;width:100%}
+}
+@media(max-width:350px){.pillrow{gap:6px}.cycle-number{min-width:35px;height:35px}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;animation:none!important;transition:none!important}}
+@media(forced-colors:active){button,.buttonlink,.option,.cycle-node,.tile,.result-card{border:2px solid ButtonText}.cycle-item.is-highlighted .cycle-node{outline:3px solid Highlight}a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible,summary:focus-visible{outline-color:Highlight}}
+@media print{.test-matrix,.test-matrix tbody,.test-matrix tr,.test-matrix th,.test-matrix td{display:table!important}.test-matrix tbody{display:table-row-group!important}.test-matrix tr{display:table-row!important}.test-matrix th,.test-matrix td{display:table-cell!important}.test-matrix thead{position:static!important;display:table-header-group!important;width:auto!important;height:auto!important;overflow:visible!important;clip:auto!important;white-space:normal!important}.test-matrix td::before{content:none!important}.sr-only{position:static!important;width:auto!important;height:auto!important;clip:auto!important;white-space:normal!important}}
+
+/* =======================================================================
+   COLOURFUL LEARNING EXPERIENCE: accessible pastels, not a monochrome UI.
+   The colours reinforce the visible words; they never encode meaning alone.
+   ======================================================================= */
+:root{
+ --bg:#f9f8fd;--panel:#ffffff;--panel2:#f2f0fa;--ink:#24243e;--muted:#48465f;
+ --border:#62617b;--accent:#623bb1;--accentText:#fff;--focus:#a23b0b;
+ --good:#146344;--bad:#982c47;--code:#221d36;--codeInk:#f8f6ff;
+ --sky-bg:#e3efff;--sky-ink:#164776;--violet-bg:#f1e7ff;--violet-ink:#56348f;
+ --neutral-bg:#f3f4f8;--neutral-ink:#233448;--mint-bg:#dcf5e9;--mint-ink:#165c3e;
+ --amber-bg:#fff0d8;--amber-ink:#795019;--rose-bg:#ffe4ed;--rose-ink:#852b50;
+ --surface-border:#dad4e9;--surface-shadow:0 7px 28px rgba(43,30,83,.065);
+}
+body[data-theme="dark"]{
+ --bg:#131021;--panel:#221d33;--panel2:#2d2740;--ink:#faf6ff;--muted:#d5cfe4;
+ --border:#c0b3da;--accent:#d0b5ff;--accentText:#211531;--focus:#ffd27b;
+ --sky-bg:#202f4b;--sky-ink:#d2e6ff;--violet-bg:#362447;--violet-ink:#eddbff;
+ --neutral-bg:#2e3242;--neutral-ink:#f0f3fa;--mint-bg:#1a3b32;--mint-ink:#c6fce4;
+ --amber-bg:#43341b;--amber-ink:#ffebb9;--rose-bg:#472638;--rose-ink:#ffdae7;
+ --surface-border:#675878;--surface-shadow:0 10px 26px rgba(0,0,0,.19);
+ color-scheme:dark;
+}
+body[data-theme="contrast"]{
+ --bg:#000;--panel:#000;--panel2:#111;--ink:#fff;--muted:#fff;
+ --border:#fff;--accent:#ffe45e;--accentText:#000;--focus:#00ffff;
+ --sky-bg:#000;--sky-ink:#fff;--violet-bg:#000;--violet-ink:#fff;
+ --neutral-bg:#000;--neutral-ink:#fff;--mint-bg:#000;--mint-ink:#fff;
+ --amber-bg:#000;--amber-ink:#fff;--rose-bg:#000;--rose-ink:#fff;
+ --surface-border:#fff;--surface-shadow:none;color-scheme:dark;
+}
+body[data-theme="calm"]{
+ --bg:#f7f7f7;--panel:#fff;--panel2:#f0f0f0;--ink:#242424;--muted:#444;
+ --border:#626262;--accent:#333333;--accentText:#fff;--focus:#91410d;
+ --sky-bg:#f1f1f1;--sky-ink:#242424;--violet-bg:#f5f5f5;--violet-ink:#242424;
+ --neutral-bg:#f1f1f1;--neutral-ink:#242424;--mint-bg:#f5f5f5;--mint-ink:#242424;
+ --amber-bg:#f1f1f1;--amber-ink:#242424;--rose-bg:#f5f5f5;--rose-ink:#242424;
+ --surface-border:#777;--surface-shadow:none;color-scheme:light;
+}
+body{
+ background:radial-gradient(ellipse 62% 27% at 4% 0%,var(--violet-bg) 0%,transparent 100%),
+             radial-gradient(ellipse 42% 21% at 100% 4%,var(--mint-bg) 0%,transparent 100%),var(--bg);
+}
+.shell{max-width:1220px;padding-bottom:80px}
+header{
+ border:1px solid var(--surface-border);border-radius:24px;padding:clamp(22px,4vw,48px);
+ background:linear-gradient(124deg,var(--sky-bg),var(--violet-bg) 62%,var(--mint-bg));
+ box-shadow:var(--surface-shadow);margin:14px 0 22px;position:relative;overflow:hidden;
+}
+header::before,header::after{content:"";position:absolute;border:2px solid var(--violet-ink);opacity:.18;border-radius:50%;pointer-events:none}
+header::before{width:165px;height:165px;right:-68px;top:-65px}
+header::after{width:74px;height:74px;right:57px;bottom:-40px}
+header h1{font-size:clamp(2.05em,5vw,3.4em);letter-spacing:-.035em;max-width:21ch;color:var(--ink)}
+header .lead{color:var(--ink);font-size:1.1em;max-width:73ch}
+header .eyebrow{color:var(--violet-ink);font-size:.8em}
+header .pill{background:var(--panel);color:var(--violet-ink);border:1.5px solid var(--violet-ink);padding:6px 12px}
+header .pill:nth-child(2){background:var(--amber-bg);color:var(--amber-ink);border-color:var(--amber-ink)}
+header .pill:nth-child(3){background:var(--mint-bg);color:var(--mint-ink);border-color:var(--mint-ink)}
+header .pill:nth-child(4){background:var(--rose-bg);color:var(--rose-ink);border-color:var(--rose-ink)}
+.settings,.timeline,.stage{border:1.5px solid var(--surface-border);box-shadow:var(--surface-shadow);border-radius:20px;background:var(--panel)}
+.settings{border-top:5px solid var(--violet-ink)}
+.settings h2{color:var(--violet-ink)}
+.settings-grid>div{background:var(--bg);border:1px solid var(--surface-border);padding:12px;border-radius:13px}
+.timeline{border-top:5px solid var(--sky-ink)}
+.timeline>.topline>strong{font-size:1.18em;color:var(--sky-ink)}
+.timeline button{border:1.5px solid var(--surface-border);border-radius:11px;background:var(--bg);gap:6px}
+.timeline button:hover{background:var(--violet-bg);border-color:var(--violet-ink);color:var(--violet-ink)}
+.timeline button[aria-current="step"]{background:var(--accent);border-color:var(--accent);color:var(--accentText);box-shadow:0 4px 0 var(--surface-border)}
+.progress{height:11px;background:var(--bg)}
+.progress span{background:linear-gradient(90deg,#3568ba,#884ab9,#247956)}
+body[data-theme="calm"] .progress span,body[data-theme="contrast"] .progress span{background:var(--accent)}
+.stage{--stage-color:var(--violet-ink);--stage-tint:var(--violet-bg);border-top:6px solid var(--stage-color);padding:clamp(18px,3vw,34px);margin:24px 0}
+#stage0,#stage3,#stage6{--stage-color:var(--sky-ink);--stage-tint:var(--sky-bg)}
+#stage1,#stage5,#stage8{--stage-color:var(--violet-ink);--stage-tint:var(--violet-bg)}
+#stage2,#stage7{--stage-color:var(--mint-ink);--stage-tint:var(--mint-bg)}
+#stage4,#stage9{--stage-color:var(--amber-ink);--stage-tint:var(--amber-bg)}
+.stage h2{font-size:clamp(1.5em,2.8vw,2em);letter-spacing:-.025em}
+.stagehead{align-items:center;gap:10px;margin-bottom:13px}
+.stagehead .step{background:var(--stage-tint);color:var(--stage-color);padding:6px 12px;border-radius:100px;font-size:.78em;letter-spacing:.035em}
+.stagehead .time{color:var(--stage-color);font-size:.94em;background:var(--stage-tint);padding:5px 11px;border-radius:100px}
+.prompt{line-height:1.5}
+.tile{border:1px solid var(--surface-border);background:var(--sky-bg);border-radius:15px;padding:16px}
+.tile h3{color:var(--sky-ink)}
+.three .tile:nth-child(3n+2),.two .tile:nth-child(2n){background:var(--violet-bg)}
+.three .tile:nth-child(3n+2) h3,.two .tile:nth-child(2n) h3{color:var(--violet-ink)}
+.three .tile:nth-child(3n){background:var(--mint-bg)}
+.three .tile:nth-child(3n) h3{color:var(--mint-ink)}
+.callout{border:1px solid var(--surface-border);border-left:6px solid var(--sky-ink);background:var(--sky-bg);border-radius:12px;padding:14px 17px}
+.callout strong{color:var(--sky-ink)}
+.callout.success{border-left-color:var(--mint-ink);background:var(--mint-bg)}
+.callout.success strong{color:var(--mint-ink)}
+.callout.caution{border-left-color:var(--rose-ink);background:var(--rose-bg)}
+.callout.caution strong{color:var(--rose-ink)}
+.teacher{background:var(--amber-bg);border-color:var(--amber-ink);border-radius:12px}
+.teacher strong{color:var(--amber-ink)}
+.details{background:var(--violet-bg);border:1px solid var(--surface-border);border-radius:12px}
+.option{border-color:var(--surface-border);background:var(--panel);border-radius:11px;transition:background-color .15s,border-color .15s}
+.option:hover,.option:focus-within{background:var(--violet-bg);border-color:var(--violet-ink)}
+.option:has(input:checked){background:var(--violet-bg);border:2px solid var(--violet-ink);padding:11.5px}
+fieldset{border-color:var(--surface-border);border-radius:14px}
+.feedback{border-color:var(--surface-border);background:var(--neutral-bg)}
+.feedback.good{background:var(--mint-bg);border-color:var(--mint-ink)}
+.feedback.bad{background:var(--rose-bg);border-color:var(--rose-ink)}
+button.primary,button[aria-current="step"],form button[type="submit"]{background:var(--accent);border-color:var(--accent);color:var(--accentText)}
+button:hover,.buttonlink:hover{background:var(--violet-bg)}
+button.primary:hover,form button[type="submit"]:hover{background:var(--violet-ink);color:var(--violet-bg)}
+.flowline span:not(.arrow){background:var(--violet-bg);color:var(--violet-ink);border-color:var(--surface-border)}
+.flowline span:not(.arrow):nth-child(4n+3){background:var(--mint-bg);color:var(--mint-ink)}
+.result-card[data-result="pass"]{background:var(--mint-bg);border-color:var(--mint-ink)}
+.result-card[data-result="fail"]{background:var(--rose-bg);border-color:var(--rose-ink)}
+.test-matrix thead th{background:var(--violet-bg);color:var(--violet-ink)}
+
+/* Lifecycle: the colourful five-stage diagram is the visual focal point. */
+.cycle-figure{background:var(--panel);border:1.5px solid var(--surface-border);border-radius:24px;padding:clamp(14px,2.6vw,30px);margin:22px 0;box-shadow:var(--surface-shadow)}
+.cycle-figure .topline{gap:12px}
+.cycle-figure h3{font-size:clamp(1.22em,2vw,1.55em);letter-spacing:-.02em}
+.cycle-figure .pill{background:var(--amber-bg);color:var(--amber-ink);border:1px solid var(--amber-ink);padding:5px 12px}
+.cycle-figure>.micro{margin:8px 0 18px}
+.cycle-list{max-width:900px;width:100%;margin:0 auto 9px;display:block}
+.cycle-list .cycle-item{max-width:none;width:100%}
+.cycle-item{--node-bg:var(--sky-bg);--node-ink:var(--sky-ink);--tag-bg:var(--violet-bg);--tag-ink:var(--violet-ink)}
+.cycle-item:nth-child(2){--node-bg:var(--violet-bg);--node-ink:var(--violet-ink);--tag-bg:var(--neutral-bg);--tag-ink:var(--neutral-ink)}
+.cycle-item:nth-child(3){--node-bg:var(--neutral-bg);--node-ink:var(--neutral-ink);--tag-bg:var(--sky-bg);--tag-ink:var(--sky-ink)}
+.cycle-item:nth-child(4){--node-bg:var(--sky-bg);--node-ink:var(--sky-ink);--tag-bg:var(--mint-bg);--tag-ink:var(--mint-ink)}
+.cycle-item:nth-child(5){--node-bg:var(--mint-bg);--node-ink:var(--mint-ink);--tag-bg:var(--amber-bg);--tag-ink:var(--amber-ink)}
+.cycle-node{background:var(--node-bg);color:var(--node-ink);border:1.5px solid transparent;border-radius:16px;
+ padding:clamp(17px,3vw,27px) clamp(14px,3vw,30px);display:flex;flex-direction:column;
+ gap:4px;align-items:center;text-align:center;position:relative;min-height:124px;justify-content:center}
+.cycle-number{position:absolute;left:13px;top:11px;height:auto;min-width:0;border:0;border-radius:0;
+ padding:1px 3px;font-size:.69em;letter-spacing:.075em;color:var(--node-ink);opacity:.91}
+.cycle-icon{height:30px;width:30px;color:var(--node-ink);margin:1px auto 3px;flex:none}
+.cycle-node .cycle-copy{width:100%;min-width:0;flex:none}
+.cycle-node h4{font-size:clamp(1.08em,1.8vw,1.25em);line-height:1.3;margin:0 0 3px;font-weight:800;color:var(--node-ink)}
+.cycle-node p{line-height:1.45;margin:0 auto;max-width:67ch;color:var(--node-ink)}
+.cycle-transition,.cycle-loop{margin:0;padding:4px 8px 5px;text-align:center;border:0;border-radius:0;font-size:.91em;line-height:1.38;color:var(--muted)}
+.cycle-transition::before,.cycle-transition::after{content:"↓";display:block;font-size:1.25em;line-height:1.1;color:var(--ink);font-weight:800;margin:2px auto}
+.cycle-transition strong,.cycle-loop strong{display:table;max-width:100%;margin:3px auto;padding:4px 14px;
+ border-radius:100px;background:var(--tag-bg);color:var(--tag-ink);font-weight:800;font-size:.99em}
+.cycle-explainer{display:block;max-width:66ch;margin:5px auto 1px;color:var(--muted);line-height:1.4}
+.cycle-loop{border-bottom:2px dashed var(--mint-ink);margin:4px auto 0;max-width:86%;border-radius:0 0 13px 13px;padding:7px 8px 11px}
+.cycle-loop::before{content:"↺  REVISIT & REFINE";display:block;font-weight:800;letter-spacing:.055em;font-size:.83em;color:var(--mint-ink)}
+.cycle-item.is-highlighted .cycle-node{padding:clamp(17px,3vw,27px) clamp(14px,3vw,30px);border:3px solid var(--focus);outline:2px solid var(--focus);outline-offset:2px;
+ box-shadow:0 8px 22px rgba(45,30,75,.13)}
+.cycle-item.is-highlighted .cycle-node h4{text-decoration:underline;text-decoration-thickness:2px;text-underline-offset:4px}
+.cycle-figure .actions{justify-content:center;gap:10px;margin-top:18px}
+.cycle-figure .actions button:first-child{background:var(--accent);color:var(--accentText)}
+.cycle-figure figcaption{background:var(--neutral-bg);color:var(--neutral-ink);padding:12px 15px;border-radius:11px;max-width:none}
+#cycleStatus{text-align:center;background:var(--mint-bg);color:var(--mint-ink);width:fit-content;max-width:100%;padding:6px 12px;border-radius:9px;margin:10px auto}
+
+/* Theme controls must also restyle fixed accents to keep a calm/high-contrast choice genuine. */
+body[data-theme="calm"] header,body[data-theme="contrast"] header{background:var(--panel2)}
+body[data-theme="calm"] header::before,body[data-theme="calm"] header::after,
+body[data-theme="contrast"] header::before,body[data-theme="contrast"] header::after{display:none}
+body[data-theme="calm"],body[data-theme="contrast"]{background:var(--bg)}
+body[data-theme="contrast"] .cycle-node{border:2px solid var(--border)}
+body[data-theme="contrast"] .cycle-figure,body[data-theme="contrast"] .tile,
+body[data-theme="contrast"] .settings,body[data-theme="contrast"] .timeline,
+body[data-theme="contrast"] .stage{border-color:var(--border)}
+body[data-theme="contrast"] .stage{border-top-color:var(--accent)}
+body[data-theme="contrast"] .cycle-transition strong,body[data-theme="contrast"] .cycle-loop strong{border:2px solid var(--border)}
+body[data-theme="contrast"] .cycle-item.is-highlighted .cycle-node{outline-color:var(--focus);border-color:var(--focus)}
+body[data-theme="contrast"] .cycle-figure .pill,body[data-theme="calm"] .cycle-figure .pill{border-color:var(--border)}
+
+@media(max-width:780px){
+ header{margin:6px 0 14px;padding:22px 17px;border-radius:18px}
+ .settings,.timeline,.stage{border-radius:16px;padding:16px}
+ .stage{margin:15px 0;border-top-width:5px}
+ .stagehead .step,.stagehead .time{display:inline-flex;margin-top:0}
+ .cycle-figure{border-radius:17px;padding:13px}
+ .cycle-node{min-height:126px;padding:23px 12px 17px}
+ .cycle-item.is-highlighted .cycle-node{padding:23px 12px 17px}
+ .cycle-number{left:8px;top:6px;font-size:.62em}
+ .cycle-explainer{font-size:.96em}
+ .cycle-loop{max-width:97%}
+}
+@media(max-width:390px){
+ header h1{font-size:1.95em}
+ .stagehead .step,.stagehead .time{font-size:.8em}
+ .cycle-figure{padding:10px}
+ .cycle-number{font-size:.6em}
+ .cycle-node{padding:24px 8px 15px}
+ .cycle-item.is-highlighted .cycle-node{padding:24px 8px 15px}
+ .cycle-icon{width:27px;height:27px}
+ .cycle-node h4{font-size:1.04em}
+ .cycle-transition,.cycle-loop{font-size:.88em;padding-left:2px;padding-right:2px}
+ .cycle-transition strong,.cycle-loop strong{padding:5px 10px}
+}
+@media(prefers-reduced-motion:reduce){.option{transition:none!important}}
+@media print{
+ body,body[data-theme="dark"],body[data-theme="contrast"]{--bg:#fff;--panel:#fff;--panel2:#f3f3f3;--ink:#111;--muted:#333;--border:#666;--accent:#111;--accentText:#fff;
+ --sky-bg:#f2f2f2;--sky-ink:#111;--violet-bg:#ededed;--violet-ink:#111;--neutral-bg:#fff;--neutral-ink:#111;
+ --mint-bg:#eee;--mint-ink:#111;--amber-bg:#f3f3f3;--amber-ink:#111;--rose-bg:#eee;--rose-ink:#111;--surface-border:#999;--surface-shadow:none;background:#fff}
+ .stage{border:1px solid #777!important}
+ .cycle-figure{box-shadow:none;border:1px solid #777;break-inside:auto}
+ .cycle-node{border:1px solid #777;min-height:0;padding:12px!important}
+ .cycle-item.is-highlighted .cycle-node{border:1px solid #777;outline:0;box-shadow:none}
+ .cycle-transition,.cycle-loop{padding:2px}
+ .cycle-transition::before,.cycle-transition::after{margin:0;font-size:1em}
+ .cycle-figure figcaption{padding:6px}
+}
+
+
+/* Always-accessible session route and return-to-settings shortcut. */
+:root{--route-height:0px}
+html{scroll-padding-top:var(--route-height)}
+.stage,.stage h2,#main{scroll-margin-top:16px}
+.skip{z-index:90}
+.route-sentinel{height:1px;pointer-events:none}
+body.route-enhanced .timeline{position:sticky;top:0;z-index:40;background:var(--panel);isolation:isolate}
+body.route-enhanced .timeline.is-stuck{box-shadow:0 10px 28px rgba(31,23,59,.23);border-color:var(--sky-ink)}
+body[data-theme="contrast"].route-enhanced .timeline.is-stuck{border-color:var(--border);box-shadow:none}
+.timeline .route-toggle{display:none}
+.prefs-shortcut{position:fixed;right:calc(14px + env(safe-area-inset-right,0px));bottom:calc(20px + env(safe-area-inset-bottom,0px));z-index:55;width:54px;height:54px;min-width:54px;min-height:54px;padding:10px;border:2px solid var(--accent);border-radius:50%;background:var(--accent);color:var(--accentText);box-shadow:0 5px 18px rgba(20,14,39,.33)}
+.prefs-shortcut:hover{background:var(--violet-ink);color:var(--violet-bg);border-color:var(--violet-ink)}
+.prefs-shortcut svg{width:27px;height:27px;flex:none}
+.prefs-shortcut[hidden]{display:none!important}
+@media(max-width:780px), (max-height:650px){
+ body.route-enhanced .timeline.is-stuck{padding:10px 12px;border-radius:0 0 15px 15px;margin-top:0;margin-bottom:8px}
+ body.route-enhanced .timeline.is-stuck>.topline{gap:3px 12px}
+ body.route-enhanced .timeline.is-stuck>.topline>strong{font-size:1em}
+ body.route-enhanced .timeline.is-stuck .micro{font-size:.82em}
+ body.route-enhanced .timeline.is-stuck .progress{margin:5px 0 7px;height:7px}
+ body.route-enhanced .timeline.is-stuck .route-toggle{display:inline-flex;min-height:44px;width:100%;justify-content:space-between;padding:5px 10px;margin:0 0 6px;background:var(--violet-bg);color:var(--violet-ink);border-color:var(--violet-ink)}
+ body.route-enhanced .timeline.is-stuck:not(.route-expanded) ol{display:none}
+ body.route-enhanced .timeline.is-stuck.route-expanded ol{display:grid;max-height:min(42vh,340px);overflow-y:auto;overscroll-behaviour:contain;overscroll-behavior:contain;padding:3px;margin:4px 0 9px}
+ body.route-enhanced .timeline.is-stuck .actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:0}
+ body.route-enhanced .timeline.is-stuck .actions button{min-width:0;min-height:44px;width:100%;font-size:.9em;padding:7px 8px;text-align:center}
+}
+@media(max-width:390px){
+ body.route-enhanced .timeline.is-stuck>.topline>strong{font-size:.92em}
+ body.route-enhanced .timeline.is-stuck .actions button{font-size:.82em;padding:7px 4px}
+}
+@media(forced-colors:active){.prefs-shortcut{border-color:ButtonText;forced-color-adjust:auto}body.route-enhanced .timeline.is-stuck{border-color:CanvasText}}
+@media print{.route-sentinel,.prefs-shortcut,.timeline .route-toggle{display:none!important}html{scroll-padding-top:0}.stage,.stage h2,#main{scroll-margin-top:0}}
+
+/* Industry and human-in-the-loop segment. Theme colours retain contrast through variables. */
+.industry-signal{display:flex;align-items:center;justify-content:space-between;gap:18px;padding:15px 18px;margin:15px 0;border:2px solid var(--amber-ink);background:var(--amber-bg);color:var(--amber-ink);border-radius:16px}
+.industry-signal p{margin:4px 0 0;max-width:75ch}.industry-signal a{color:inherit;text-decoration:underline;text-decoration-thickness:1.5px}.signal-kicker{font-size:.85em;letter-spacing:.07em;text-transform:uppercase}.signal-icon{font-size:2.2em;font-weight:900;line-height:1;flex:none}
+.industry-grid .tile{border-width:2px}.industry-grid .tile h3{margin-bottom:7px}.industry-grid .tile p{margin:0}
+.industry-example{background:var(--mint-bg);border-left-color:var(--mint-ink)}.industry-example strong,.industry-example a{color:var(--mint-ink)}
+.industry-audit{background:var(--violet-bg);border:1.5px solid var(--surface-border);border-radius:16px;padding:clamp(12px,2vw,20px);margin:15px 0}.industry-audit h3{color:var(--violet-ink)}.industry-audit pre{margin:9px 0}.industry-audit fieldset{background:var(--panel)}
+@media(max-width:540px){.industry-signal{padding:12px;gap:9px}.signal-icon{font-size:1.45em}.industry-audit{padding:12px}.industry-audit .option{padding:12px}}
+@media print{.industry-signal,.industry-audit{break-inside:avoid}}
+
+/* A colourful but readable responsible-testing panel; each class uses existing
+   accessible theme variables for light, calm, dark and high-contrast themes. */
+.responsibility-panel{border:2px solid var(--surface-border);background:var(--panel);border-radius:18px;padding:clamp(12px,2vw,20px);margin:18px 0}
+.responsibility-header{display:flex;align-items:center;gap:12px;margin-bottom:13px}
+.responsibility-header h3{margin:3px 0;color:var(--ink);font-size:1.2em}
+.responsibility-mark{flex:none;display:grid;place-items:center;border-radius:14px;background:var(--amber-bg);color:var(--amber-ink);height:50px;width:50px;font-size:1.65em;border:1.5px solid var(--amber-ink)}
+.responsibility-kicker{color:var(--amber-ink);font-size:.86em;font-weight:800;letter-spacing:.045em;text-transform:uppercase}
+.responsibility-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.responsibility-card{border:1.5px solid var(--surface-border);border-left:6px solid currentColor;border-radius:13px;padding:13px;min-width:0}
+.responsibility-card strong{display:block;margin-bottom:5px}.responsibility-card p{margin:0}
+.responsibility-card.privacy{background:var(--violet-bg);color:var(--violet-ink)}
+.responsibility-card.permission{background:var(--sky-bg);color:var(--sky-ink)}
+.responsibility-card.fairness{background:var(--mint-bg);color:var(--mint-ink)}
+.responsibility-card.accountable{background:var(--amber-bg);color:var(--amber-ink)}
+.responsibility-case{margin-top:14px;padding:14px;background:var(--panel2);border:1.5px solid var(--surface-border);border-radius:13px}
+.responsibility-case h3{margin:0 0 5px;color:var(--ink)}.responsibility-case p{margin:0 0 9px}
+.responsibility-case fieldset{background:var(--panel)}
+@media(max-width:680px){.responsibility-grid{grid-template-columns:1fr}.responsibility-header{align-items:flex-start}.responsibility-card{padding:12px}}
+@media print{.responsibility-card,.responsibility-case{break-inside:avoid}}
+
+/* Secure-development thread: inherits the accessible theme palette for all four settings. */
+.security-thread{display:flex;align-items:flex-start;gap:13px;padding:15px 17px;margin:15px 0;border-radius:15px;border:2px solid var(--amber-ink);background:var(--amber-bg);color:var(--amber-ink);max-width:100%}
+.security-thread strong{color:inherit}.security-thread .thread-icon{flex:none;display:grid;place-items:center;min-width:36px;min-height:36px;border:2px solid currentColor;border-radius:11px;font-size:1.05em;line-height:1;font-weight:900}
+.security-thread.compact-thread{padding:12px 14px}.security-note{background:var(--mint-bg);color:var(--mint-ink);border-left:4px solid var(--mint-ink);border-radius:9px;padding:10px 13px;max-width:none}
+.cycle-node .req-line{display:block;margin:7px 0;max-width:65ch}.req-chip{display:inline-block;padding:2px 9px;margin-right:6px;margin-bottom:3px;border-radius:99px;border:1.5px solid currentColor;font-size:.8em;font-weight:800;white-space:normal}
+.functional-chip{background:var(--sky-bg);color:var(--sky-ink)}.security-chip{background:var(--amber-bg);color:var(--amber-ink)}
+@media(max-width:540px){.security-thread{padding:11px;gap:9px}.security-thread .thread-icon{min-width:30px;min-height:30px}.req-chip{display:table;margin:5px auto}}
+@media print{.security-thread{break-inside:avoid}}
+
+/* Clearly separate self-directed learning from the 20-minute teaching stages. */
+.independent-section{margin:35px 0;padding:clamp(17px,3vw,30px);background:var(--panel);border:2px solid var(--mint-ink);border-top:7px solid var(--mint-ink);border-radius:20px;box-shadow:var(--surface-shadow);scroll-margin-top:var(--route-height)}
+.independent-section>.topline>h2{color:var(--mint-ink)}
+.independent-section .pill{background:var(--mint-bg);color:var(--mint-ink);border-color:var(--mint-ink)}
+.post-session-panel{padding:12px 0}.post-session-panel>h2{color:var(--violet-ink)}
+.extra-reading{margin-top:20px}.extra-reading>summary{padding:8px 0}
+@media(max-width:780px){.independent-section{padding:16px}.independent-section .topline{align-items:flex-start}}
+@media print{.independent-section{break-before:page;box-shadow:none}}
+
+/* ========================================================================
+   EDITORIAL PRESENTATION TEMPLATE · visual system based on supplied example
+   Semantic structure, activities, themes and accessible navigation preserved.
+   ======================================================================== */
+:root {
+ --bg:#f3efe9; --panel:#fffdfa; --panel2:#f7f3ed; --ink:#322f2d;
+ --muted:#4d4945; --border:#777069; --accent:#593d91; --accentText:#ffffff;
+ --focus:#923300; --surface-border:#e0d4c5;
+ --surface-shadow:0 13px 39px rgba(74,49,24,.10);
+ --sky-bg:#dcecff; --sky-ink:#153f71; --violet-bg:#f0e7fa; --violet-ink:#513180;
+ --mint-bg:#dff2e8; --mint-ink:#12563a; --amber-bg:#fff0d4; --amber-ink:#684617;
+ --rose-bg:#fce5e8; --rose-ink:#822b40; --neutral-bg:#f5f1eb; --neutral-ink:#34302d;
+ --deck-serif:Georgia, Cambria, "Times New Roman", serif;
+}
+body[data-theme="calm"]{--surface-border:#b4afa9;--surface-shadow:none}
+body[data-theme="dark"]{--surface-shadow:0 14px 45px rgba(0,0,0,.3)}
+body[data-theme="contrast"]{--surface-shadow:none;--surface-border:#fff}
+body{background:var(--bg);font-family:var(--deck-serif);font-size:var(--fs);line-height:var(--lh)}
+.shell{max-width:1260px;padding:clamp(12px,2vw,30px) clamp(10px,2.3vw,30px) 78px}
+header,.settings,.timeline,main>.stage,.independent-section{background:var(--panel);border-color:var(--surface-border)}
+header{background:var(--panel);border:1px solid var(--surface-border);border-top:8px solid var(--violet-ink);border-radius:8px;
+ padding:clamp(28px,5vw,64px);box-shadow:var(--surface-shadow);margin:0 0 18px}
+header::before,header::after{display:none}
+header h1{font-family:var(--deck-serif);font-weight:700;font-size:clamp(2.4em,5.7vw,4.4em);letter-spacing:-.045em;line-height:1.1;max-width:22ch;margin:20px 0 21px}
+header .eyebrow,.eyebrow{font:700 .74em/1.45 system-ui,sans-serif;letter-spacing:.07em;color:var(--violet-ink)}
+header .lead{font-family:var(--deck-serif);font-size:clamp(1.06em,1.6vw,1.35em);line-height:1.55;max-width:64ch;color:var(--ink)}
+header .pillrow{margin:27px 0 18px;gap:9px}
+header .pill{font:700 .82em/1.4 system-ui,sans-serif;border-radius:5px;padding:8px 11px}
+header>.micro{border-top:1px solid var(--surface-border);padding-top:18px;margin-top:22px;max-width:82ch}
+.settings{border:1px solid var(--surface-border);border-left:5px solid var(--violet-ink);border-radius:8px;padding:clamp(16px,2.5vw,26px);box-shadow:none}
+.settings h2{font-family:var(--deck-serif);font-size:clamp(1.35em,2.1vw,1.8em);color:var(--ink)}
+.settings-grid>div{background:var(--panel2);border-radius:5px}
+.settings label,.settings select,.settings button{font-family:system-ui,-apple-system,"Segoe UI",sans-serif}
+.timeline{border:1px solid var(--surface-border);border-top:4px solid var(--violet-ink);border-radius:8px;padding:12px clamp(10px,1.8vw,22px);box-shadow:0 5px 18px rgba(60,43,35,.06);font-family:system-ui,-apple-system,"Segoe UI",sans-serif}
+.timeline>.topline>strong{color:var(--ink);font-size:1.04em;letter-spacing:-.01em}
+.timeline button{border:1px solid var(--surface-border);border-radius:5px;background:var(--panel);font-size:.86em;min-height:45px;padding:7px 9px}
+.timeline .minute{font-size:.82em}
+.timeline button[aria-current="step"]{background:var(--violet-ink);color:var(--panel);border-color:var(--violet-ink);box-shadow:none}
+.timeline button:hover{background:var(--violet-bg);color:var(--violet-ink)}
+.timeline button[aria-current="step"]:hover{background:var(--violet-ink);color:var(--panel)}
+.timeline>.actions button{font-size:.88em}
+.progress{height:7px;margin:8px 0 10px;border-color:var(--surface-border)}
+main{display:block}
+main>.stage{
+ --stage-color:var(--violet-ink);--stage-tint:var(--violet-bg);
+ border:1px solid var(--surface-border);border-top:5px solid var(--stage-color);
+ border-radius:8px;box-shadow:var(--surface-shadow);
+ padding:clamp(23px,4.25vw,56px);margin:20px auto 30px;
+ min-height:clamp(570px,66vh,765px);max-width:1180px;
+}
+#stage0,#stage3,#stage6{--stage-color:var(--sky-ink);--stage-tint:var(--sky-bg)}
+#stage1,#stage5,#stage8{--stage-color:var(--violet-ink);--stage-tint:var(--violet-bg)}
+#stage2,#stage7{--stage-color:var(--mint-ink);--stage-tint:var(--mint-bg)}
+#stage4,#stage9{--stage-color:var(--amber-ink);--stage-tint:var(--amber-bg)}
+.stagehead{display:flex;align-items:center;gap:9px;margin-bottom:12px}
+.stagehead .step{border-radius:4px;background:var(--neutral-bg);color:var(--muted);font:600 .72em/1.4 system-ui,sans-serif;
+ letter-spacing:.018em;text-transform:uppercase;padding:5px 9px}
+.stagehead .time{border:0;border-radius:0;background:transparent;color:var(--muted);font:600 .76em/1.4 system-ui,sans-serif;padding:2px 0;margin-left:auto}
+main>.stage h2{font:700 clamp(2em,4.5vw,3.25em)/1.16 var(--deck-serif);letter-spacing:-.035em;
+ color:var(--ink);margin:12px 0 20px;max-width:28ch}
+main>.stage h3,.independent-section h2,.independent-section h3{font-family:var(--deck-serif);letter-spacing:-.015em}
+main>.stage>p{font-size:1.075em;line-height:1.58;max-width:82ch}
+.stage .prompt{font-family:var(--deck-serif);font-size:1.17em;font-weight:700;line-height:1.55;max-width:70ch}
+.stage .lead{font-family:var(--deck-serif)}
+.stage .two,.stage .three{gap:clamp(12px,1.7vw,22px);margin:18px 0}
+.stage .tile{border:1px solid var(--surface-border);border-top:5px solid var(--stage-color);border-radius:5px;
+ background:var(--panel);padding:clamp(14px,1.8vw,22px);box-shadow:0 2px 0 rgba(70,50,25,.06);min-width:0}
+.stage .tile h3{color:var(--ink);font-size:1.28em;margin:0 0 10px;line-height:1.27}
+.stage .tile p{font-size:1.035em;line-height:1.54}
+.stage .three .tile:nth-child(3n+2),.stage .two .tile:nth-child(2n){background:var(--panel);border-top-color:var(--violet-ink)}
+.stage .three .tile:nth-child(3n){background:var(--panel);border-top-color:var(--mint-ink)}
+.stage .three .tile:nth-child(3n+2) h3,.stage .two .tile:nth-child(2n) h3,.stage .three .tile:nth-child(3n) h3{color:var(--ink)}
+.stage .callout,.stage .security-note{border:0;border-left:4px solid var(--sky-ink);background:var(--sky-bg);color:var(--ink);
+ padding:16px 19px;border-radius:4px;margin:18px 0;font-size:1.035em}
+.stage .callout strong{color:var(--ink)}
+.stage .callout.success{background:var(--mint-bg);border-left-color:var(--mint-ink)}
+.stage .callout.caution{background:var(--rose-bg);border-left-color:var(--rose-ink)}
+.stage .teacher{font-family:system-ui,-apple-system,"Segoe UI",sans-serif;font-size:.89em;
+ background:var(--amber-bg);border-left:4px solid var(--amber-ink);border-radius:5px;margin-top:30px}
+.stage .details{border-radius:5px;background:var(--neutral-bg);border-color:var(--surface-border);padding:12px 17px}
+.stage details summary{font-family:system-ui,-apple-system,"Segoe UI",sans-serif}
+.stage pre{border-radius:5px;border-left:5px solid var(--violet-ink);font-size:.91em}
+.stage .flowline span:not(.arrow){border-radius:5px}
+.stage .flowline{gap:7px}
+.stage input,.stage select,.stage textarea,.stage button,.independent-section button{font-family:system-ui,-apple-system,"Segoe UI",sans-serif}
+.stage input,.stage select,.stage textarea{border-radius:5px}
+.stage fieldset{border-color:var(--surface-border);border-radius:5px;margin-top:17px;padding:16px}
+.stage legend{font-family:var(--deck-serif);font-size:1.15em}
+.stage .option{background:var(--panel);border:1px solid var(--surface-border);border-radius:5px}
+.stage button,.buttonlink{border-radius:5px}
+.stage .feedback{border-radius:5px}
+.stage .industry-audit,.stage .cycle-figure{border-radius:8px;box-shadow:none}
+.stage .cycle-node{border-radius:6px}
+.stage .cycle-transition strong{border-radius:4px}
+.cycle-figure figcaption{border-radius:5px}
+.independent-section{max-width:1180px;margin:35px auto;border:1px solid var(--surface-border);
+ border-top:5px solid var(--mint-ink);border-radius:8px;padding:clamp(22px,4vw,46px)}
+.independent-section>.topline>h2{font-size:clamp(1.75em,3vw,2.35em);line-height:1.17;color:var(--ink)}
+.independent-section .tile{border:1px solid var(--surface-border);border-top:5px solid var(--mint-ink);background:var(--panel);border-radius:5px}
+.independent-section .two .tile:nth-child(2){border-top-color:var(--violet-ink);background:var(--panel)}
+.independent-section .tile h3{font-size:1.33em;color:var(--ink)}
+.footer{margin-top:34px;padding:23px 7px;border-top:2px solid var(--surface-border)}
+.footer h2{font-family:var(--deck-serif)}
+/* The reference slide: small label, strong type, cream-topped cards, slim success rule and blue notice. */
+.outcome-slide{border-top-color:var(--surface-border)!important}
+.outcome-slide .stagehead .step{font:400 .73em/1.35 var(--deck-serif);background:var(--neutral-bg);color:var(--muted);letter-spacing:0;padding:4px 8px}
+.outcome-slide h2{margin:7px 0 19px!important}
+.outcome-slide .outcome-intro{font-size:1.12em;margin:0 0 15px;max-width:none}
+.outcome-slide .outcome-cards{gap:14px;margin:14px 0 22px}
+.outcome-slide .outcome-cards .outcome-card{display:flex;flex-direction:column;border:1.5px solid var(--surface-border);
+ border-radius:5px;overflow:hidden;padding:0;background:var(--panel);box-shadow:0 2px 0 rgba(76,59,41,.09)}
+.outcome-slide .outcome-card:nth-child(n){background:var(--panel);border-top:1.5px solid var(--surface-border)}
+.outcome-icon{min-height:55px;display:flex;align-items:center;justify-content:center;background:var(--neutral-bg);
+ border-bottom:2px solid var(--surface-border);font:1.25em/1 system-ui,sans-serif;padding:9px}
+.outcome-copy{padding:16px 19px 19px;flex:1}
+.outcome-slide .outcome-card h3{font:400 clamp(1.2em,2vw,1.45em)/1.25 var(--deck-serif);color:var(--ink)!important;margin:0 0 9px}
+.outcome-slide .outcome-card p{font-size:1.06em;line-height:1.55;color:var(--muted);margin:0}
+.outcome-slide .outcome-card p strong{color:var(--ink)}
+.outcome-success{margin:23px 0 19px;border-left:1.5px solid var(--border);padding:13px 0 11px 24px}
+.outcome-success h3{font:400 1.3em/1.4 var(--deck-serif);margin:0 0 12px;color:var(--ink)}
+.outcome-success h3 span{font:1em system-ui,sans-serif;margin-right:6px}
+.outcome-success p{margin:0;max-width:82ch;font-size:1.075em;line-height:1.56}
+.outcome-info{display:flex;align-items:center;gap:15px;background:var(--sky-bg);border-radius:5px;
+ padding:18px 20px;margin:17px 0 0;color:var(--sky-ink)}
+.outcome-info p{margin:0;max-width:none;font-size:1.025em;line-height:1.5}
+.outcome-info .info-mark{flex:none;font:700 1.2em/1 system-ui,sans-serif}
+/* Make optional navigation and controls look modern while slide typography remains editorial. */
+.prefs-shortcut{border-radius:50%;box-shadow:0 6px 16px rgba(30,30,30,.24)}
+body:not(.route-enhanced)[data-focus="on"] .stage{display:block!important}
+/* High contrast overrides always win against decorative overrides. */
+body[data-theme="contrast"] main>.stage,body[data-theme="contrast"] .outcome-card,
+body[data-theme="contrast"] .outcome-info,body[data-theme="contrast"] .outcome-success,
+body[data-theme="contrast"] .settings,body[data-theme="contrast"] .timeline{border-color:var(--border)}
+body[data-theme="contrast"] .outcome-card,body[data-theme="contrast"] .outcome-icon,
+body[data-theme="contrast"] .outcome-info{background:var(--panel);color:var(--ink)}
+body[data-theme="contrast"] .stagehead .step{background:var(--panel);color:var(--ink);border:1px solid var(--border)}
+body[data-theme="contrast"] .outcome-icon{border-bottom-color:var(--border)}
+@media(max-width:780px){
+ .shell{padding:10px 10px 60px}
+ header{padding:23px 20px}
+ header h1{font-size:clamp(2.05em,7vw,3em)}
+ .settings,.timeline{padding:13px}
+ main>.stage{padding:clamp(19px,4.2vw,30px);min-height:0;margin:15px auto 25px;border-radius:6px}
+ main>.stage h2{font-size:clamp(1.95em,6.2vw,2.85em)}
+ .outcome-slide .outcome-cards{gap:11px}
+ .outcome-success{padding-left:15px}
+ .outcome-info{padding:15px;gap:10px}
+ .timeline button{font-size:.89em}
+}
+@media(max-width:540px){
+ .stagehead{align-items:flex-start;flex-wrap:wrap;gap:6px}
+ .stagehead .time{font-size:.75em}
+ .outcome-slide .outcome-cards{grid-template-columns:1fr}
+ .outcome-slide .outcome-card{display:grid;grid-template-columns:64px 1fr}
+ .outcome-icon{border-bottom:0;border-right:2px solid var(--surface-border);height:100%;min-height:96px}
+ .outcome-copy{padding:13px 15px}
+ .outcome-slide .outcome-card h3{font-size:1.26em}
+ .outcome-slide .outcome-card p{font-size:1em}
+ .outcome-info{align-items:flex-start}
+ .outcome-info p{font-size:1em}
+}
+@media(max-width:360px){
+ .shell{padding:7px 7px 50px}
+ main>.stage{padding:16px}
+ main>.stage h2{font-size:1.87em}
+ .outcome-slide .outcome-card{grid-template-columns:45px 1fr}
+ .outcome-icon{padding:5px}
+ .outcome-copy{padding:12px}
+ .stagehead .time{margin-left:0;width:100%}
+}
+@media print{
+ body,body[data-theme="dark"],body[data-theme="contrast"]{--bg:#fff;--panel:#fff;--panel2:#f8f8f8;--ink:#111;
+ --muted:#333;--surface-border:#888;--surface-shadow:none;background:#fff}
+ header,main>.stage,.independent-section{box-shadow:none}
+ main>.stage,body[data-focus="on"] main>.stage{min-height:0;border:1px solid #777!important;
+ page-break-inside:avoid;break-inside:avoid;margin:12px 0}
+ .outcome-icon,.outcome-info{background:#eee}
+}
+
+
+/* Presentation mode shows exactly one teaching slide, not the reading pack. */
+body[data-focus="on"] main{padding-bottom:100vh}
+@media print{body[data-focus="on"] main{padding-bottom:0}}
+body[data-focus="on"] .independent-section,body[data-focus="on"] .footer{display:none}
+body:not(.route-enhanced)[data-focus="on"] .independent-section,
+body:not(.route-enhanced)[data-focus="on"] .footer{display:block}
+.timeline .actions button.primary{background:var(--accent);border-color:var(--accent);color:var(--accentText)}
+.timeline .actions button.primary:hover{background:var(--violet-ink);border-color:var(--violet-ink);color:var(--violet-bg)}
+@media(max-width:540px){
+ .outcome-slide .outcome-cards .outcome-card{display:grid;grid-template-columns:64px minmax(0,1fr)}
+ .outcome-slide .outcome-cards .outcome-card .outcome-icon{border-bottom:0;border-right:2px solid var(--surface-border);height:100%;min-height:100px}
+}
+@media(max-width:360px){.outcome-slide .outcome-cards .outcome-card{grid-template-columns:45px minmax(0,1fr)}}
+@media print{body[data-focus="on"] .independent-section,body[data-focus="on"] .footer{display:block!important}}
+
+
+/* True slide presentation: the slide occupies the entire viewport, not a small document card.
+   The same CSS theatre works if a browser denies the Fullscreen API (e.g. certain embeds). */
+.presentation-dock[hidden]{display:none!important}
+.presentation-dock{position:fixed;inset:auto 0 0 0;z-index:1200;display:flex;align-items:center;justify-content:space-between;
+ gap:14px;min-height:76px;padding:10px max(18px,env(safe-area-inset-right)) calc(10px + env(safe-area-inset-bottom));
+ background:var(--panel);color:var(--ink);border-top:2px solid var(--surface-border);box-shadow:0 -7px 24px rgba(23,18,33,.15);
+ font:600 clamp(15px,1.1vw,21px)/1.3 system-ui,-apple-system,'Segoe UI',sans-serif}
+.presentation-dock .dock-nav{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.presentation-dock button{font:inherit;min-height:48px;min-width:48px;padding:8px 17px;border-radius:7px;white-space:nowrap}
+.presentation-dock .dock-counter{text-align:center;font-weight:750;white-space:nowrap}
+.presentation-dock .dock-mode{display:block;font-size:.72em;font-weight:500;color:var(--muted)}
+body[data-live="on"]{overflow:hidden;font-size:clamp(22px,1.55vw,65px)}
+body[data-live="on"][data-size="large"]{font-size:clamp(26px,1.85vw,75px)}
+body[data-live="on"] .skip,body[data-live="on"] header,body[data-live="on"] .settings,
+body[data-live="on"] .route-sentinel,body[data-live="on"] .timeline,
+body[data-live="on"] .independent-section,body[data-live="on"] .footer,
+body[data-live="on"] .prefs-shortcut{display:none!important}
+body[data-live="on"] .shell{width:100%!important;max-width:none!important;margin:0!important;padding:0!important}
+body[data-live="on"] main{display:block!important;max-width:none!important;margin:0!important;padding:0!important}
+body[data-live="on"] main>.stage{display:none!important}
+body[data-live="on"] main>.stage.current{display:block!important;position:fixed!important;
+ inset:0 0 var(--presentation-dock-height,78px) 0!important;width:100%!important;
+ max-width:none!important;min-height:0!important;height:auto!important;margin:0!important;
+ padding:clamp(24px,3.5vw,120px)!important;background:var(--panel)!important;
+ border:0!important;border-top:9px solid var(--stage-color)!important;border-radius:0!important;
+ box-shadow:none!important;overflow-x:hidden!important;overflow-y:auto!important;
+ overscroll-behavior:contain;scrollbar-gutter:stable;z-index:1100}
+body[data-live="on"] main>.stage h2{font-size:clamp(38px,3.35vw,112px);line-height:1.14;max-width:30ch}
+body[data-live="on"] main>.stage h3{font-size:1.16em}
+body[data-live="on"] main>.stage p,body[data-live="on"] main>.stage li{max-width:80ch}
+body[data-live="on"] main>.stage .stagehead .step,
+body[data-live="on"] main>.stage .stagehead .time{font-size:.66em}
+body[data-live="on"] main>.stage .outcome-card h3{font-size:1.15em}
+body[data-live="on"] main>.stage .outcome-card p{font-size:.92em}
+body[data-live="on"] main>.stage pre{font-size:.75em}
+body[data-live="on"] main>.stage .micro{font-size:.8em}
+body[data-live="on"] main>.stage .cycle-list{max-width:1100px}
+body[data-live="on"] main>.stage .teacher{margin-top:16px}
+body[data-live="on"] main>.stage:focus{outline-offset:-4px}
+/* Headings receive programme-controlled focus for screen readers; they are not tab stops. */
+body[data-live="on"] main>.stage h2[tabindex="-1"]:focus{outline:none;box-shadow:none}
+@media(max-width:780px){
+ .presentation-dock{gap:8px;padding:8px 10px calc(8px + env(safe-area-inset-bottom));flex-wrap:wrap}
+ .presentation-dock .dock-nav{gap:6px}
+ .presentation-dock button{padding:7px 10px;min-height:44px}
+ .presentation-dock .dock-counter{font-size:.88em}
+ .presentation-dock .dock-mode{display:none}
+ body[data-live="on"]{font-size:clamp(18px,3.5vw,25px)}
+ body[data-live="on"][data-size="large"]{font-size:clamp(22px,4vw,29px)}
+ body[data-live="on"] main>.stage.current{padding:clamp(18px,4vw,36px)!important}
+ body[data-live="on"] main>.stage h2{font-size:clamp(33px,6vw,48px)}
+}
+@media(max-width:480px){
+ .presentation-dock{display:grid;grid-template-columns:1fr auto;grid-template-areas:'counter exit' 'navigation navigation';gap:6px}
+ .presentation-dock .dock-counter{grid-area:counter;text-align:left}
+ .presentation-dock .dock-nav{grid-area:navigation;display:grid;grid-template-columns:1fr 1fr}
+ .presentation-dock .dock-nav button{width:100%}
+ .presentation-dock #exitPresentation{grid-area:exit}
+ body[data-live="on"] main>.stage.current{padding:17px!important}
+}
+@media print{
+ .presentation-dock{display:none!important}
+ body[data-live="on"]{overflow:visible!important;font-size:10pt}
+ body[data-live="on"] .shell{max-width:none!important}
+ body[data-live="on"] main>.stage,body[data-live="on"] main>.stage.current{
+  display:block!important;position:static!important;inset:auto!important;width:auto!important;max-width:none!important;
+  height:auto!important;min-height:0!important;overflow:visible!important;break-inside:avoid;
+  border:1px solid #777!important;padding:12px!important;margin:9px 0!important}
+ body[data-live="on"] main>.stage h2{font-size:13pt!important}
+}
+
+</style>
+</head>
+<body data-live="off" data-focus="on" data-motion="off" data-presenter="off" data-size="standard" data-spacing="standard" data-theme="light">
+<a class="skip" href="#main">Skip to teaching content</a>
+<div class="shell">
+<header>
+<div class="eyebrow">LJMU · Level 5 · Software Testing and Quality Assurance · 20-minute session</div>
+<h1>From Requirements to Reliable Software</h1>
+<p class="lead">Testing, verification, validation and Test-Driven Development, with one worked example throughout: a familiar login page. Security runs through every stage.</p>
+<div class="pillrow"><span class="pill">Level 5 · three learning outcomes</span><span class="pill">Requirement → test → evidence</span><span class="pill">Secure by design</span><span class="pill">No account or installation</span></div>
+<p class="micro">Dr Yashar Baradaranshokouhi. Press <strong>Start full-screen presentation</strong> to present one slide at a time; use the arrow keys to move and Esc to exit. Take part by speaking, typing, discussing with a neighbour, or thinking silently. Every visual has a written description.</p>
+</header>
+<section aria-labelledby="access-title" class="settings">
+<div class="topline"><h2 id="access-title">Make this session work for you</h2><span class="micro">Settings apply only to this open page and send no data.</span></div>
+<div class="settings-grid">
+<div><label for="theme">Colour theme</label><select id="theme"><option value="light">Colourful (default)</option><option value="calm">Calm / low-colour</option><option value="dark">Dark</option><option value="contrast">High contrast</option></select></div>
+<div><label for="fontsize">Text size</label><select id="fontsize"><option value="standard">Standard</option><option value="large">Large</option></select></div>
+<div><label for="spacing">Reading layout</label><select id="spacing"><option value="standard">Standard spacing</option><option value="wide">More spacing / shorter lines</option></select></div>
+<div><label for="focus">How to display content</label><select id="focus"><option value="on" selected>Presentation view · one slide</option><option value="off">Full session · scroll all slides</option></select></div>
+<div><label for="presenter">Additional teaching notes</label><select id="presenter"><option value="off">Hide presenter notes</option><option value="on">Show presenter notes</option></select></div>
+<div><label for="motion">Movement</label><select id="motion"><option value="off">Reduce motion (default)</option><option value="on">Allow gentle scrolling</option></select></div>
+</div>
+<div class="actions"><button class="primary" id="startPresentation" type="button">⛶ Start full-screen presentation</button><button id="print" type="button">Print / save as PDF</button><button id="reset" type="button">Reset activities and settings</button></div>
+</section>
+<div aria-hidden="true" class="route-sentinel" id="routeStart"></div>
+<nav aria-label="Session navigation" class="timeline"><div class="topline"><strong>Session route · 20 minutes · 13 slides</strong><span aria-live="polite" class="micro" id="stageStatus">Stage 1 of 13</span></div><div aria-hidden="true" class="progress"><span id="progress"></span></div><button aria-controls="stageNav" aria-expanded="true" class="route-toggle" id="routeToggle" type="button">Stages <span aria-hidden="true" id="routeToggleState">▴</span></button><ol id="stageNav"><li><button data-go="0" type="button">1. Welcome and framing<span class="minute">0:00–1:00</span></button></li><li><button data-go="1" type="button">2. Learning outcomes<span class="minute">1:00–1:30</span></button></li><li><button data-go="2" type="button">3. A familiar login page<span class="minute">1:30–3:30</span></button></li><li><button data-go="3" type="button">4. From features to requirements<span class="minute">3:30–5:00</span></button></li><li><button data-go="4" type="button">5. Testing at three levels<span class="minute">5:00–7:30</span></button></li><li><button data-go="5" type="button">6. Testing, verification, validation<span class="minute">7:30–10:00</span></button></li><li><button data-go="6" type="button">7. Where the trust boundary sits<span class="minute">10:00–11:00</span></button></li><li><button data-go="7" type="button">8. Which one can the user defeat?<span class="minute">11:00–12:00</span></button></li><li><button data-go="8" type="button">9. Red, green, refactor<span class="minute">12:00–13:15</span></button></li><li><button data-go="9" type="button">10. The cycle, in code<span class="minute">13:15–14:30</span></button></li><li><button data-go="10" type="button">11. Code-then-test and TDD<span class="minute">14:30–15:30</span></button></li><li><button data-go="11" type="button">12. Check for understanding<span class="minute">15:30–17:30</span></button></li><li><button data-go="12" type="button">13. What to take away<span class="minute">17:30–18:30</span></button></li></ol><div class="actions screenonly"><button id="prev" type="button">← Previous stage</button><button class="primary" id="next" type="button">Next stage →</button><button id="routePresent" type="button">⛶ Present full screen</button></div></nav>
+<main id="main" tabindex="-1">
+<section aria-labelledby="h0" class="stage current" id="stage0"><div class="stagehead"><span class="step">Engage · 1 minute</span><span class="time">Slide 01 / 13 · 0:00–1:00</span></div><h2 id="h0">Writing code is only the beginning</h2>
+<div class="two"><div><p class="prompt">How do we know we built the right thing, and built it correctly?</p>
+<p>Software engineering is more than making code run. We also need to know whether the software <strong>behaves correctly</strong>, whether it <strong>meets its specification</strong>, whether it <strong>solves the user's real problem</strong>, and whether <strong>security was built in from the start</strong>.</p>
+<p class="micro">One worked example the whole way through: a familiar login page. TDD stands for Test-Driven Development.</p></div>
+<div class="tile"><h3>Ask the room</h3><p>“What makes software good?”</p><p class="micro">Think for 10 seconds, then share one idea with a neighbour or the room. There are no wrong answers here.</p></div></div>
+<div class="teacher"><strong>Presenter notes</strong>Frame the room first: "I'll treat you as my Level 5 class in Software Testing and Quality Assurance, so please answer as students would." Then the message: writing code is only one part of software engineering. We also need to know whether the software behaves correctly, whether it meets its specification, whether it solves the user's real problem, and whether security was built in from the start. One example the whole way through: a login page. Expand TDD in full the first time: Test-Driven Development. Keep to 60 seconds.</div></section>
+<section aria-labelledby="h1" class="stage outcome-slide" id="stage1"><div class="stagehead"><span class="step">Learning outcomes</span><span class="time">Slide 02 / 13 · 1:00–1:30</span></div><h2 id="h1">What you should be able to do</h2>
+<p class="outcome-intro">By the end of this session, you will be able to:</p>
+<div class="three outcome-cards">
+<article class="tile outcome-card"><div class="outcome-icon" aria-hidden="true">🔎</div><div class="outcome-copy"><h3>Distinguish</h3><p>Tell <strong>testing</strong>, <strong>verification</strong> and <strong>validation</strong> apart: three different questions about the same software.</p></div></article>
+<article class="tile outcome-card"><div class="outcome-icon" aria-hidden="true">🔁</div><div class="outcome-copy"><h3>Compare</h3><p>Tell <strong>code-then-test</strong> apart from <strong>TDD</strong>: when the test enters the process, and how much it shapes the design.</p></div></article>
+<article class="tile outcome-card"><div class="outcome-icon" aria-hidden="true">🧩</div><div class="outcome-copy"><h3>Identify</h3><p>Recognise <strong>unit</strong>, <strong>integration</strong> and <strong>functional</strong> tests in a login system.</p></div></article>
+</div>
+<div class="outcome-success"><h3><span aria-hidden="true">🛡️</span> The thread running through everything</h3><p>Testing and secure development are related, but a feature that <strong>works correctly</strong> is not automatically <strong>secure</strong>.</p></div>
+<div class="outcome-info" role="note"><span class="info-mark" aria-hidden="true">ⓘ</span><p><strong>Route:</strong> first requirements, then testing levels, then the three definitions and security, and finally TDD. A short check comes at the end.</p></div>
+<div class="teacher"><strong>Presenter notes</strong>Read the three outcomes quickly - do not lecture from this slide. The line underneath is the thread running through everything: a feature can work and still be insecure. Tell them there is a short check at the end. Signpost the route: "First requirements, then testing levels, then the three definitions and security, and finally TDD." Move on within 30 seconds.</div></section>
+<section aria-labelledby="h2" class="stage" id="stage2"><div class="stagehead"><span class="step">Requirements · 2 minutes</span><span class="time">Slide 03 / 13 · 1:30–3:30</span></div><h2 id="h2">A familiar login page</h2>
+<div class="two"><div><figure class="tile" aria-labelledby="loginCap" style="max-width:360px">
+<figcaption id="loginCap" class="micro">Illustration of a typical login page (not a working form)</figcaption>
+<div role="img" aria-label="A sign-in form with an email field, a password field with a Show control, a Sign in button and a Forgotten your password link.">
+<h3 style="margin-top:6px">Sign in</h3>
+<p class="micro" style="margin-bottom:2px"><strong>Email</strong></p>
+<div style="border:1.5px solid var(--border);border-radius:8px;padding:8px 10px;color:var(--muted)">you@example.com</div>
+<p class="micro" style="margin:10px 0 2px"><strong>Password</strong></p>
+<div style="border:1.5px solid var(--border);border-radius:8px;padding:8px 10px;display:flex;justify-content:space-between"><span>••••••••</span><span style="color:var(--accent);font-weight:700">Show</span></div>
+<div style="margin-top:12px;background:var(--accent);color:var(--accentText);border-radius:8px;padding:9px;text-align:center;font-weight:700">Sign in</div>
+<p class="micro" style="text-align:center;margin-top:8px;text-decoration:underline">Forgotten your password?</p>
+</div></figure></div>
+<div class="tile"><h3>Ask the room</h3><p class="prompt">“If we had to rebuild this page, what features and requirements would we need?”</p><p class="micro">Say, type or discuss four or five ideas. The aim is to notice, not to list everything.</p>
+<details class="details"><summary>Stuck? Show some common features</summary><div class="pillrow"><span class="pill">username / email</span><span class="pill">password field</span><span class="pill">show / hide password</span><span class="pill">forgotten password</span><span class="pill">sign-in button</span><span class="pill">error feedback</span><span class="pill">password rules</span><span class="pill">accessibility</span><span class="pill">responsive layout</span><span class="pill">secure authentication</span></div></details>
+<div class="callout">These are <strong>observations</strong>, not yet requirements. Next we turn them into testable statements.</div></div></div>
+<div class="teacher"><strong>Presenter notes</strong>First real interaction. Describe the mock-up aloud for anyone who cannot see it clearly: an email field, a masked password field with a Show control, a sign-in button, a forgotten-password link. Ask the question and take four or five answers, no more - the aim is participation, not an exhaustive list. If the room is quiet, offer a choice: "Is the show/hide control a requirement, or just decoration?" Only reveal the common features if the group dries up. Close by saying these are observations, not yet requirements.</div></section>
+<section aria-labelledby="h3" class="stage" id="stage3"><div class="stagehead"><span class="step">Requirements · 1 min 30 sec</span><span class="time">Slide 04 / 13 · 3:30–5:00</span></div><h2 id="h3">From features to requirements</h2>
+<ul class="checklist" aria-label="Login requirements" style="list-style:none;padding-left:0"><li class="tile" style="margin:8px 0;padding:10px 14px"><span class="req-line"><strong class="req-chip functional-chip">REQ-01</strong> The system <strong>shall</strong> allow a registered user to authenticate with an email and a password.</span></li><li class="tile" style="margin:8px 0;padding:10px 14px"><span class="req-line"><strong class="req-chip functional-chip">REQ-02</strong> The password field <strong>shall</strong> hide entered characters by default.</span></li><li class="tile" style="margin:8px 0;padding:10px 14px"><span class="req-line"><strong class="req-chip functional-chip">REQ-03</strong> The user <strong>shall</strong> be able to toggle password visibility.</span></li><li class="tile" style="margin:8px 0;padding:10px 14px"><span class="req-line"><strong class="req-chip functional-chip">REQ-04</strong> Invalid credentials <strong>shall</strong> be rejected, without revealing which field was wrong.</span></li><li class="tile" style="margin:8px 0;padding:10px 14px"><span class="req-line"><strong class="req-chip functional-chip">REQ-05</strong> A new password shorter than the minimum length <strong>shall</strong> be rejected.</span></li><li class="tile" style="margin:8px 0;padding:10px 14px"><span class="req-line"><strong class="req-chip security-chip">REQ-06</strong> The system <strong>shall not</strong> rely on client-side logic alone to enforce authentication.</span></li></ul>
+<div class="callout success">Every requirement gets an <strong>ID</strong> so we can trace it to the test that checks it. REQ-05 is the rule we build with TDD later. REQ-06 is about <strong>security</strong>, and we come back to it.</div>
+<p>Requirements are agreed with users and stakeholders, and checked back with them. That check is where <strong>validation</strong> begins.</p>
+<p class="prompt">“How would we know whether we have understood the user's need correctly?”</p>
+<div class="teacher"><strong>Presenter notes</strong>Turn two or three of their answers into "shall" statements. A requirement says what the system must do, testably. Point at the IDs: every requirement gets one because we will trace each one to a test. Traceability from requirements to tests is what lets us show evidence, and it matters most in high-integrity and safety-critical work. REQ-05 is the rule we will build with TDD later. REQ-06 is written in the negative and is about security - we come back to it. Ask: "How would we know we have understood the user's need correctly?" Lead them to: you check with the user. Name it: that is validation, and it starts before any code exists. Transition: "Once we know what the system should do, how do we know our implementation actually does it?" Checkpoint: five minutes.</div></section>
+<section aria-labelledby="h4" class="stage" id="stage4"><div class="stagehead"><span class="step">Testing · 2 min 30 sec</span><span class="time">Slide 05 / 13 · 5:00–7:30</span></div><h2 id="h4">Testing at three levels</h2>
+<div class="three">
+<article class="tile"><h3>Level 1 · Unit test</h3><p>One function, on its own. No browser, no database, no network.</p><pre aria-label="Example unit test call">is_valid_password("abc")
+→ False</pre></article>
+<article class="tile"><h3>Level 2 · Integration test</h3><p>Two parts talking to each other, for real.</p><p class="micro">The login form sends credentials to the authentication service and handles what comes back.</p></article>
+<article class="tile"><h3>Level 3 · Functional / UI test</h3><p>The system driven the way a user would drive it.</p><p class="micro">Click show / hide and confirm the password really does become visible.</p></article>
+</div>
+<div class="callout caution"><strong>Careful:</strong> typing a username and password into a real web page is <strong>not</strong> a unit test. Depending on scope it is a functional, integration, system or end-to-end test.</div>
+<div class="quizbox"><form class="quiz" id="levelForm" data-name="level" data-answer="functional" data-good="Correct. It drives the real page the way a user would, so it is a functional or UI test." data-bad="Not quite. The test goes through the browser and the whole page, so it is a functional or UI test, not a single function in isolation."><fieldset><legend>Classify: we check, through the browser, that the Sign in button stays disabled until both fields are filled. Which level is this?</legend><label class="option"><input name="level" type="radio" value="unit"/> Unit test</label><label class="option"><input name="level" type="radio" value="integration"/> Integration test</label><label class="option"><input name="level" type="radio" value="functional"/> Functional / UI test</label></fieldset><button type="submit">Check my answer</button></form><div aria-atomic="true" aria-live="polite" class="feedback" id="levelFeedback" role="status"></div></div>
+<div class="teacher"><strong>Presenter notes</strong>Three levels only. A unit test isolates one function; an integration test checks two parts genuinely communicate; a functional or UI test drives the system as a user would. The levels differ by scope, not importance. Run the classification question. Paraphrase the caution box rather than reading it. One sentence from practice, adapted to your own experience, e.g. "In the testing module I lead, and in the industry testing workshops I ran with UST, this is the first confusion we fix." Checkpoint: seven and a half minutes.</div></section>
+<section aria-labelledby="h5" class="stage" id="stage5"><div class="stagehead"><span class="step">Definitions · 2 min 30 sec</span><span class="time">Slide 06 / 13 · 7:30–10:00</span></div><h2 id="h5">Testing, verification, validation</h2>
+<div class="three">
+<article class="tile"><h3>Testing</h3><p><strong>An activity: exercise the software and observe.</strong></p><p class="micro">Run the login flow. Try a short password. The evidence it produces serves both verification and validation.</p></article>
+<article class="tile"><h3>Verification</h3><p><strong>Did we build the product according to the specification?</strong></p><p class="micro">Trace REQ-04 to the test that checks it: does the code conform? Tests are one route; reviews, static analysis and formal proof are others.</p></article>
+<article class="tile"><h3>Validation</h3><p><strong>Did we build the right product for the user's real need?</strong></p><p class="micro">Is this login process usable and appropriate? Were the requirements themselves correct?</p></article>
+</div>
+<div class="two"><div class="callout"><strong>Verification:</strong> are we building the product right?</div><div class="callout"><strong>Validation:</strong> are we building the right product?</div></div>
+<div class="security-thread compact-thread" role="note"><span aria-hidden="true" class="thread-icon">◆</span><div><strong>Limits of testing:</strong> tests can show the presence of bugs, never their absence (Dijkstra). That is why high-integrity systems also need formal verification.</div></div>
+<div class="two"><div class="quizbox"><form class="quiz" id="tvvAForm" data-name="tvvA" data-answer="validation" data-good="Correct. We are checking the product against the users’ real need, so this is validation." data-bad="Not quite. Asking whether it suits the staff checks the real need, not the specification. That is validation."><fieldset><legend>Scenario A: we ask the client whether this sign-in journey suits their staff.</legend><label class="option"><input name="tvvA" type="radio" value="verification"/> Verification</label><label class="option"><input name="tvvA" type="radio" value="validation"/> Validation</label></fieldset><button type="submit">Check my answer</button></form><div aria-atomic="true" aria-live="polite" class="feedback" id="tvvAFeedback" role="status"></div></div>
+<div class="quizbox"><form class="quiz" id="tvvBForm" data-name="tvvB" data-answer="verification" data-good="Correct. Checking the implementation against the specification is verification." data-bad="Not quite. Tracing requirements to tests checks conformance to the specification. That is verification."><fieldset><legend>Scenario B: we trace each requirement to the test that checks it.</legend><label class="option"><input name="tvvB" type="radio" value="verification"/> Verification</label><label class="option"><input name="tvvB" type="radio" value="validation"/> Validation</label></fieldset><button type="submit">Check my answer</button></form><div aria-atomic="true" aria-live="polite" class="feedback" id="tvvBFeedback" role="status"></div></div></div>
+<div class="teacher"><strong>Presenter notes</strong>The primary learning outcome hangs on this stage, so take the time. Start with the framing: testing is an activity, not a third goal - it produces evidence that serves both verification and validation. Verification asks whether the implementation conforms to the specification: trace REQ-04 to the test that checks it. Testing is only one route to verification; reviews, static analysis and formal methods such as model checking and proof are others. High-integrity systems rely on those because tests show the presence of bugs, never their absence. Validation asks whether we built the right thing for the user, which is why it began at the requirements stage. Warn against describing testing as "building it right" - that phrase belongs to verification. Run the two scenarios. Checkpoint: ten minutes.</div></section>
+<section aria-labelledby="h6" class="stage" id="stage6"><div class="stagehead"><span class="step">Secure development · 1 minute</span><span class="time">Slide 07 / 13 · 10:00–11:00</span></div><h2 id="h6">Where the trust boundary sits</h2>
+<p class="prompt">Suppose this login is verified against every requirement and validated with users. Is it secure?</p>
+<div class="two">
+<article class="tile"><h3>In the browser: not trusted</h3><ul><li>HTML, CSS and JavaScript are handed to the user</li><li>The user can read and change all of it</li><li>Checks here give fast, friendly feedback</li><li>They cannot enforce anything</li></ul></article>
+<article class="tile"><h3>On the server: trusted</h3><ul><li>Credentials are actually verified</li><li>Sessions and tokens are issued</li><li>Authorisation decisions are made</li><li>Rules are enforced, whatever the client sends</li></ul></article>
+</div>
+<div class="callout caution"><strong>“A login page that works is not automatically a secure login system.”</strong> That is why REQ-06 exists: security is a requirement from the start, with its own tests.</div>
+<p class="micro">Behind every login is real people's data. Protecting it is a professional, ethical and data-protection responsibility.</p>
+<div class="teacher"><strong>Presenter notes</strong>Bridge from the definitions: "Suppose this login is verified against every requirement and validated with users. Is it secure?" Ask: "If JavaScript in the browser says a user is logged in, is that enough?" Take one answer, then land it: everything on the client side is under the user's control. Client-side checks are a usability feature, not a security control; authentication and authorisation must be enforced by trusted server-side logic. That is why REQ-06 exists. One line on the human side: behind every login is real people's data. Then: "Let me show you what that looks like in code."</div></section>
+<section aria-labelledby="h7" class="stage" id="stage7"><div class="stagehead"><span class="step">Secure development · 1 minute</span><span class="time">Slide 08 / 13 · 11:00–12:00</span></div><h2 id="h7">Which one can the user defeat?</h2>
+<div class="two">
+<div><h3>In the browser (JavaScript)</h3><pre aria-label="Client-side JavaScript check">// login.js - runs on the user's machine
+if (localStorage.getItem("loggedIn") === "true") {
+    showDashboard();
+}</pre></div>
+<div><h3>On the server (Python, Flask)</h3><pre aria-label="Server-side Python check">
+# app.py - runs on our server (REQ-06)
+@app.route("/dashboard")
+def dashboard():
+    if "user_id" not in session:
+        abort(401)
+    return render_dashboard(session["user_id"])</pre></div>
+</div>
+<div class="quizbox"><form class="quiz" id="defeatForm" data-name="defeat" data-answer="client" data-good="Correct. The browser check runs on the user’s machine, so they control it: set loggedIn to true in the developer tools and refresh. The server check uses a signed session checked on every request." data-bad="Not quite. The browser check runs on the user’s machine, so they can change it. The server check is enforced on every request, whatever the browser sends."><fieldset><legend>Which check can the user defeat?</legend><label class="option"><input name="defeat" type="radio" value="client"/> The browser check</label><label class="option"><input name="defeat" type="radio" value="server"/> The server check</label><label class="option"><input name="defeat" type="radio" value="neither"/> Neither</label></fieldset><button type="submit">Check my answer</button></form><div aria-atomic="true" aria-live="polite" class="feedback" id="defeatFeedback" role="status"></div></div>
+<details class="details"><summary>How would someone defeat it?</summary><p>Anyone can open the browser's developer tools, set <code>loggedIn</code> to <code>"true"</code> and refresh. On the server, the session is signed and checked on every request, so editing the browser changes nothing: the server decides.</p></details>
+<div class="callout"><strong>Keep the client check:</strong> it gives fast, friendly feedback. It just cannot be the security control. Both snippets are simplified for teaching (no password hashing, rate limiting or CSRF protection shown).</div>
+<div class="teacher"><strong>Presenter notes</strong>Show, don't tell. Give them five seconds to read, then ask: "Which of these can the user defeat, and how?" Left: the check runs in the browser, so anyone can change localStorage and refresh. Right: the session is signed by the server and checked on every request. Point at the REQ-06 comment: this is the requirement from earlier, now visible in code - and exactly the kind of rule we should write a test for. Keep the client check for usability, never rely on it for security. If running late, skip the question and give the answer. Checkpoint: twelve minutes.</div></section>
+<section aria-labelledby="h8" class="stage" id="stage8"><div class="stagehead"><span class="step">Test-Driven Development · 1 min 15 sec</span><span class="time">Slide 09 / 13 · 12:00–13:15</span></div><h2 id="h8">Red, green, refactor</h2>
+<div aria-label="The TDD cycle" class="flowline"><span>1. Red: write a failing test</span><span aria-hidden="true" class="arrow">→</span><span>2. Green: make it pass</span><span aria-hidden="true" class="arrow">→</span><span>3. Refactor: tidy it up</span><span aria-hidden="true" class="arrow">↺</span></div>
+<div class="three">
+<article class="tile"><h3>Step 1 · Red</h3><p>One small test for the next required behaviour. Run it. Watch it fail.</p><p class="micro">REQ-05: a password shorter than eight characters is rejected.</p></article>
+<article class="tile"><h3>Step 2 · Green</h3><p>Write the least code that satisfies the test. Nothing clever yet.</p><p class="micro">Check the length. That is all, for now.</p></article>
+<article class="tile"><h3>Step 3 · Refactor</h3><p>Improve the code while the test keeps passing. The test is the safety net.</p><p class="micro">Rename, extract, simplify. Behaviour unchanged.</p></article>
+</div>
+<div class="quizbox"><form class="quiz" id="redForm" data-name="red" data-answer="fail" data-good="Correct. It fails, and that is the point: a test that passes before the code exists is testing nothing." data-bad="Not quite. Before any implementation exists, the test must fail. A test that passes with no code is testing nothing."><fieldset><legend>What should happen when we run the test before writing the implementation?</legend><label class="option"><input name="red" type="radio" value="pass"/> It passes</label><label class="option"><input name="red" type="radio" value="fail"/> It fails</label><label class="option"><input name="red" type="radio" value="skip"/> It is skipped</label></fieldset><button type="submit">Check my answer</button></form><div aria-atomic="true" aria-live="polite" class="feedback" id="redFeedback" role="status"></div></div>
+<div class="callout caution">Then round again for the next small behaviour. TDD is <strong>not</strong> “write every test first, then build the whole application”. It is a short, repeated cycle.</div>
+<div class="teacher"><strong>Presenter notes</strong>"So how do we build quality in as we go, rather than checking at the end?" Expand the acronym again: Test-Driven Development. Ask before explaining, using the question. Walk the three steps using REQ-05. Stress the step size: one behaviour, not one feature and not one sprint. Paraphrase the bottom note - this misconception is very common. Do not claim TDD is superior here. Checkpoint: thirteen and a quarter minutes.</div></section>
+<section aria-labelledby="h9" class="stage" id="stage9"><div class="stagehead"><span class="step">Test-Driven Development · 1 min 15 sec</span><span class="time">Slide 10 / 13 · 13:15–14:30</span></div><h2 id="h9">The cycle, in code</h2>
+<div class="two">
+<div><h3>Red: the tests come first</h3><pre aria-label="Two Python tests">
+# REQ-05
+def test_short_password_rejected():
+    assert is_valid_password("abc123") is False
+
+def test_eight_characters_accepted():
+    assert is_valid_password("abcd1234") is True</pre></div>
+<div><h3>Green: the minimum that passes</h3><pre aria-label="Python implementation">
+# passes both tests
+def is_valid_password(password):
+    return len(password) >= 8</pre></div>
+</div>
+<h3>Try it: run the two tests against three versions</h3>
+<p class="micro">A JavaScript copy of these tests runs in your browser. Nothing is uploaded. Predict each result before you press the button.</p>
+<div class="actions"><button class="primary" id="runNone" type="button">1. No function yet</button><button id="runFalse" type="button">2. return False</button><button id="runLen" type="button">3. len(password) &gt;= 8</button></div>
+<p aria-atomic="true" aria-live="polite" class="sr-only" id="runnerAnnouncement" role="status"></p>
+<div class="feedback" id="runnerFeedback">Not run yet. Predict first, then run.</div>
+<div class="callout success"><strong>What the runs show:</strong> with no function, the tests fail for the wrong reason (the function does not exist). <code>return False</code> passes the first test but not the second. The second test is what forces a real length check: each new test drives the code one step on.</div>
+<div class="callout caution"><strong>Deliberately simplified:</strong> eight is illustrative. NIST SP 800-63B-4 requires at least 15 characters when a password is the only factor (eight with multi-factor authentication). A passing test is evidence about the cases covered, not proof of correctness.</div>
+<div class="teacher"><strong>Presenter notes</strong>A prepared example, not live coding. Walk it as two rounds of the cycle. Round one: the first test traces to REQ-05. Its very first run fails because the function does not exist - failing for the wrong reason. Add a stub, run again, and it fails on the assertion; now red means something. Ask: "What is the least code that passes this one test?" Someone may say return False - agree, that is the true minimum. Round two: the second test now fails, and forces the real length check. Use the three runner buttons to show this. Then refactor with both tests as the safety net. Checkpoint: fourteen and a half minutes.</div></section>
+<section aria-labelledby="h10" class="stage" id="stage10"><div class="stagehead"><span class="step">Comparison · 1 minute</span><span class="time">Slide 11 / 13 · 14:30–15:30</span></div><h2 id="h10">Code-then-test and TDD</h2>
+<table class="test-matrix" role="table"><caption class="micro">Two approaches side by side. The first row is identical on purpose.</caption>
+<thead role="rowgroup"><tr role="row"><th role="columnheader" scope="col">Code-then-test</th><th role="columnheader" scope="col">Test-driven development</th></tr></thead>
+<tbody role="rowgroup">
+<tr role="row"><td data-label="Code-then-test" role="cell">Requirements identified</td><td data-label="TDD" role="cell">Requirements identified</td></tr>
+<tr role="row"><td data-label="Code-then-test" role="cell">Implement the feature</td><td data-label="TDD" role="cell">Write one small failing test</td></tr>
+<tr role="row"><td data-label="Code-then-test" role="cell">Write the tests afterwards</td><td data-label="TDD" role="cell">Write the minimum code that passes</td></tr>
+<tr role="row"><td data-label="Code-then-test" role="cell">Fix whatever the tests reveal</td><td data-label="TDD" role="cell">Refactor, with the tests still passing</td></tr>
+<tr role="row"><td data-label="Code-then-test" role="cell">Can suit prototypes and exploratory work</td><td data-label="TDD" role="cell">Gives feedback during implementation</td></tr>
+</tbody></table>
+<p class="prompt">“Which approach gives feedback earlier about whether one small requirement is satisfied?”</p>
+<div class="callout"><strong>“The important distinction is not the type of test. It is when the test enters the process, and how strongly it shapes the design.”</strong> Neither approach is universally better.</div>
+<div class="teacher"><strong>Presenter notes</strong>Keep this brisk. The first row is identical on purpose. Ask the question. Neither is universally better: code-then-test suits prototypes and exploratory work; TDD gives early feedback and pushes design towards small, testable units, at the cost of discipline and upfront thinking. Finish with the quoted line.</div></section>
+<section aria-labelledby="h11" class="stage" id="stage11"><div class="stagehead"><span class="step">Assessment · 2 minutes</span><span class="time">Slide 12 / 13 · 15:30–17:30</span></div><h2 id="h11">Check for understanding</h2>
+<p class="micro">Answer by speaking, with fingers 1, 2 or 3, or by selecting below. Each question maps to one learning outcome.</p>
+<div class="two"><div class="quizbox"><form class="quiz" id="q1Form" data-name="q1" data-answer="integration" data-good="Correct. Two parts genuinely communicating is an integration test (outcome 3)." data-bad="Not quite. The form and the authentication service are two parts talking to each other, so this is an integration test."><fieldset><legend>Question 1: The login form sends credentials to the auth service and we check the reply. Which level of test is this?</legend><label class="option"><input name="q1" type="radio" value="unit"/> Unit</label><label class="option"><input name="q1" type="radio" value="integration"/> Integration</label><label class="option"><input name="q1" type="radio" value="functional"/> Functional</label></fieldset><button type="submit">Check my answer</button></form><div aria-atomic="true" aria-live="polite" class="feedback" id="q1Feedback" role="status"></div></div>
+<div class="quizbox"><form class="quiz" id="q2Form" data-name="q2" data-answer="validation" data-good="Correct. The product may meet its specification but not the users’ real need, so this is validation (outcome 1)." data-bad="Not quite. The software may do exactly what was specified; the problem is that it does not meet the users’ need. That is validation."><fieldset><legend>Question 2: Users keep resetting passwords because they never spot the Show control. Verification or validation problem?</legend><label class="option"><input name="q2" type="radio" value="verification"/> Verification</label><label class="option"><input name="q2" type="radio" value="validation"/> Validation</label></fieldset><button type="submit">Check my answer</button></form><div aria-atomic="true" aria-live="polite" class="feedback" id="q2Feedback" role="status"></div></div>
+</div><div class="two"><div class="quizbox"><form class="quiz" id="q3Form" data-name="q3" data-answer="tdd" data-good="Correct. Writing the failing test first is TDD (outcome 2)." data-bad="Not quite. In code-then-test the tests come afterwards. Writing a failing test first is TDD."><fieldset><legend>Question 3: We write a failing test before implementing the password rule. Which approach is that?</legend><label class="option"><input name="q3" type="radio" value="ctt"/> Code-then-test</label><label class="option"><input name="q3" type="radio" value="tdd"/> TDD</label></fieldset><button type="submit">Check my answer</button></form><div aria-atomic="true" aria-live="polite" class="feedback" id="q3Feedback" role="status"></div></div>
+<div class="quizbox"><form class="quiz" id="bonusForm" data-name="bonus" data-answer="no" data-good="Correct. Functional correctness alone does not prove security. Enforcement has to be on the server (REQ-06), exactly like the right-hand code earlier." data-bad="Not quite. If the browser can bypass the check, the system is not secure. Enforcement has to be on the server (REQ-06)."><fieldset><legend>Bonus: the login page behaves correctly, but access control can be bypassed by editing the code in the browser. Is the system secure?</legend><label class="option"><input name="bonus" type="radio" value="yes"/> Yes</label><label class="option"><input name="bonus" type="radio" value="no"/> No</label></fieldset><button type="submit">Check my answer</button></form><div aria-atomic="true" aria-live="polite" class="feedback" id="bonusFeedback" role="status"></div></div></div>
+<div class="teacher"><strong>Presenter notes</strong>Do not cut this - it shows whether the outcomes were met. Fingers 1/2/3 or a show of hands; no Mentimeter in the interview. Answers: Q1 integration (outcome 3). Q2 validation - the product may meet its specification but does not meet the users' need (outcome 1). Q3 TDD (outcome 2). Bonus: no - that is exactly the left-hand code from earlier; enforcement has to be on the server (REQ-06). Q2 is the hardest. If some say verification, use it: ask what made that option tempting, then clarify.</div></section>
+<section aria-labelledby="h12" class="stage" id="stage12"><div class="stagehead"><span class="step">Recap and next steps · 1 minute</span><span class="time">Slide 13 / 13 · 17:30–18:30</span></div><h2 id="h12">What to take away</h2>
+<div class="three" style="grid-template-columns:repeat(auto-fit,minmax(200px,1fr))">
+<article class="tile"><h3>Testing</h3><p>How the software behaves when we exercise it.</p></article>
+<article class="tile"><h3>Verification</h3><p>Whether we built it according to the specification.</p></article>
+<article class="tile"><h3>Validation</h3><p>Whether we built the right thing for the user's need.</p></article>
+<article class="tile"><h3>TDD</h3><p>Testing moved into development: red, green, refactor.</p></article>
+</div>
+<div class="callout caution"><strong>And a system that appears to work is not necessarily a system that is secure.</strong></div>
+<div class="callout success"><strong>Next:</strong> a lab where you write these tests in pytest and run them in a GitHub CI pipeline. Later, at Levels 6 and 7: static analysis, threat modelling and formal verification.</div>
+<p class="prompt">Say it back: in one sentence, what is the difference between verification and validation?</p>
+<div class="teacher"><strong>Presenter notes</strong>Close on the outcomes, not new material: "We started with a simple login page, but even that shows software engineering is more than writing code. Testing tells us how the software behaves when we exercise it. Verification checks whether we built it to specification. Validation asks whether we built the right product for the user's need. TDD brings testing into development through red, green, refactor. And a system that appears to work is not necessarily a system that is secure." One line on AI: "AI and agentic tools can now write both the code and the tests - which makes it more important, not less, that engineers understand requirements, security and what a good test looks like." Point at "Next" to show where the session sits. Aim to finish by 18:30-19:00, then invite questions.</div></section>
+</main>
+<section aria-labelledby="independent-title" class="independent-section" id="independent">
+<div class="topline"><h2 id="independent-title">After the session · practise and explore</h2><span class="pill">Independent study</span></div>
+<div class="two"><div class="tile"><h3>Core task (30 minutes)</h3><p>In Python, write the two tests for REQ-05 with pytest and watch them fail. Implement <code>is_valid_password</code> until both pass. Then add a third test for a boundary case of your choice, and push your work to GitHub so the tests run in CI.</p></div>
+<div class="tile"><h3>Extension: security (20 minutes)</h3><p>Write a test for REQ-06: a request to <code>/dashboard</code> with no valid session must be rejected with 401, even if the browser claims the user is logged in. Use only your own practice project.</p></div></div>
+<div class="industry-audit"><h3>Human review: did the AI miss anything?</h3><p>An AI assistant wrote only one test and says: “The password rule is done.”</p><pre>def test_short_password_rejected():
+    assert is_valid_password("abc123") is False</pre>
+<div class="quizbox"><form class="quiz" id="aiForm" data-name="ai" data-answer="b" data-good="Correct. One passing test covers one case. Add the acceptance and boundary tests, and remember security needs its own test. The engineer owns the requirement, the missing cases and the accountability." data-bad="Not yet. A single passing test says nothing about the cases it does not cover. Expected results come from the requirement, not from the code."><fieldset><legend>What should the human reviewer do?</legend><label class="option"><input name="ai" type="radio" value="a"/> Accept it: the test passes, so the rule is done.</label><label class="option"><input name="ai" type="radio" value="b"/> Add the missing cases: an eight-character password is accepted, a boundary case, and a REQ-06 security test. Then run them.</label><label class="option"><input name="ai" type="radio" value="c"/> Change the expected result to match whatever the code returns.</label></fieldset><button type="submit">Check my answer</button></form><div aria-atomic="true" aria-live="polite" class="feedback" id="aiFeedback" role="status"></div></div></div>
+<p class="micro"><strong>Progression:</strong> the same requirement-to-evidence method applies later to automated regression suites, security requirements, DevSecOps pipelines, traceability and formal verification.</p></section>
+<section aria-labelledby="implementation" class="footer"><h2 id="implementation">Accessibility notes and sources</h2>
+<div class="two"><div><h3>Inclusive design</h3><p>Choose a colour theme (colourful, calm, dark or high contrast), larger text, wider spacing, a one-stage-at-a-time focus view and reduced motion. Settings apply only to this open page and send no data. You can take part by speaking, typing, discussing with a neighbour or thinking silently. Every visual has a written description, all activities work without an internet connection, and the whole session can be printed or saved as a PDF.</p></div>
+<div><h3>Sources and further reading</h3><ol class="source">
+<li><a href="https://pages.nist.gov/800-63-4/sp800-63b.html" rel="noopener noreferrer" target="_blank">NIST SP 800-63B-4, Authentication and Authenticator Management<span class="sr-only"> (opens in a new tab)</span></a></li>
+<li>Beck, K. (2002) <em>Test-Driven Development: By Example</em>. Addison-Wesley.</li>
+<li>Dijkstra, E. W. (1970) <em>Notes on Structured Programming</em>. Source of “testing shows the presence, not the absence, of bugs”.</li>
+<li><a href="https://udlguidelines.cast.org/" rel="noopener noreferrer" target="_blank">CAST (2024), Universal Design for Learning Guidelines 3.0<span class="sr-only"> (opens in a new tab)</span></a></li>
+<li><a href="https://www.w3.org/TR/WCAG22/" rel="noopener noreferrer" target="_blank">W3C, WCAG 2.2<span class="sr-only"> (opens in a new tab)</span></a> and <a href="https://www.w3.org/TR/coga-usable/" rel="noopener noreferrer" target="_blank">Making Content Usable for People with Cognitive and Learning Disabilities<span class="sr-only"> (opens in a new tab)</span></a></li>
+<li><a href="https://doi.org/10.1007/BF00138871" rel="noopener noreferrer" target="_blank">Biggs (1996), Enhancing teaching through constructive alignment<span class="sr-only"> (opens in a new tab)</span></a></li>
+</ol></div></div>
+<p class="micro">Dr Yashar Baradaranshokouhi · Software Engineering · Level 5. Code examples are simplified teaching constructs.</p></section>
+<noscript><p class="nojs">JavaScript is disabled. You can still read the full session and worked examples. Interactive checks, navigation buttons and the test runner need JavaScript enabled.</p></noscript>
+</div>
+<button aria-label="Return to accessibility and display settings" class="prefs-shortcut" hidden="" id="prefsShortcut" title="Go to settings" type="button">
+<svg aria-hidden="true" fill="none" focusable="false" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24"><path d="M12 8a4 4 0 1 0 0 8 4 4 0 0 0 0-8Z"></path><path d="M19.4 15a1.7 1.7 0 0 0 .34 1.88l.06.06-2 2-.06-.06a1.7 1.7 0 0 0-1.88-.34 1.7 1.7 0 0 0-1.06 1.57V21h-2.8v-.9a1.7 1.7 0 0 0-1.06-1.57 1.7 1.7 0 0 0-1.88.34l-.06.06-2-2 .06-.06A1.7 1.7 0 0 0 7.4 15a1.7 1.7 0 0 0-1.57-1.06H5v-2.8h.83A1.7 1.7 0 0 0 7.4 10.1a1.7 1.7 0 0 0-.34-1.88L7 8.16l2-2 .06.06a1.7 1.7 0 0 0 1.88.34A1.7 1.7 0 0 0 12 5V4h2.8v1a1.7 1.7 0 0 0 1.06 1.57 1.7 1.7 0 0 0 1.88-.34l.06-.06 2 2-.06.06a1.7 1.7 0 0 0-.34 1.88A1.7 1.7 0 0 0 21 11.14h.8v2.8H21A1.7 1.7 0 0 0 19.4 15Z" transform="translate(-.9 -.5) scale(.96)"></path></svg>
+<span class="sr-only">Settings</span>
+</button>
+<div aria-label="Full-screen presentation controls" class="presentation-dock" hidden id="presentationDock" role="toolbar">
+ <div class="dock-nav"><button id="slidePrev" type="button">← Previous</button><button class="primary" id="slideNext" type="button">Next →</button></div>
+ <div class="dock-counter"><span id="slideCounter" aria-live="polite">Slide 1 of 13</span><span class="dock-mode" id="fullscreenStatus" role="status">Slide fills the screen</span></div>
+ <button id="exitPresentation" type="button" aria-label="Exit full-screen presentation">✕ Exit presentation</button>
+</div>
+<script>
+(()=>{'use strict';
+const body=document.body,stages=[...document.querySelectorAll('.stage')], nav=[...document.querySelectorAll('[data-go]')];let current=0;
+
+/* The route sticks after settings. Collapse only on a small viewport so it never
+   consumes the full mobile screen. ResizeObserver keeps headings clear of it. */
+const route=document.querySelector('.timeline');
+const routeStart=document.getElementById('routeStart');
+const routeToggle=document.getElementById('routeToggle');
+const routeToggleState=document.getElementById('routeToggleState');
+const settings=document.querySelector('.settings');
+const settingsHeading=document.getElementById('access-title');
+const prefsShortcut=document.getElementById('prefsShortcut');
+const compactRoute=window.matchMedia('(max-width:780px), (max-height:650px)');
+let routeExpanded=false;
+body.classList.add('route-enhanced');
+function updateRouteHeight(){
+ const height=route.classList.contains('is-stuck')?Math.ceil(route.getBoundingClientRect().height):0;
+ document.documentElement.style.setProperty('--route-height',height+'px');
+}
+function setRouteExpanded(expanded){
+ routeExpanded=expanded;
+ route.classList.toggle('route-expanded',expanded);
+ routeToggle.setAttribute('aria-expanded',String(expanded));
+ routeToggle.firstChild.textContent=expanded?'Hide stages ':'Show stages ';
+ routeToggleState.textContent=expanded?'▴':'▾';
+ updateRouteHeight();
+}
+function updatePinnedRoute(){
+ const stuck=routeStart.getBoundingClientRect().bottom<=1;
+ const wasStuck=route.classList.contains('is-stuck');
+ route.classList.toggle('is-stuck',stuck);
+ if(stuck!==wasStuck){
+  // Never hide the list while a keyboard user is interacting with a stage button.
+  setRouteExpanded(stuck&&compactRoute.matches&&route.contains(document.activeElement)&&nav.some(b=>b===document.activeElement));
+ }
+ prefsShortcut.hidden=settings.getBoundingClientRect().bottom>0;
+ updateRouteHeight();
+}
+routeToggle.addEventListener('click',()=>setRouteExpanded(!routeExpanded));
+prefsShortcut.addEventListener('click',()=>{
+ settingsHeading.setAttribute('tabindex','-1');
+ settingsHeading.focus({preventScroll:true});
+ settings.scrollIntoView({behavior:'auto',block:'start'});
+ updatePinnedRoute();
+});
+window.addEventListener('scroll',updatePinnedRoute,{passive:true});
+window.addEventListener('resize',updatePinnedRoute,{passive:true});
+compactRoute.addEventListener('change',()=>{setRouteExpanded(false);updatePinnedRoute();});
+if('ResizeObserver' in window)new ResizeObserver(updateRouteHeight).observe(route);
+updatePinnedRoute();
+
+function setStage(i){const previous=current;current=Math.max(0,Math.min(stages.length-1,i));stages.forEach((s,j)=>s.classList.toggle('current',j===current));nav.forEach((b,j)=>{if(j===current)b.setAttribute('aria-current','step');else b.removeAttribute('aria-current')});if(current!==previous||!document.getElementById('stageStatus').textContent){document.getElementById('stageStatus').textContent=`Stage ${current+1} of ${stages.length}`;}document.getElementById('progress').style.width=((current+1)/stages.length*100)+'%';document.getElementById('prev').disabled=current===0;document.getElementById('next').disabled=current===stages.length-1;document.getElementById('slideCounter').textContent=`Slide ${current+1} of ${stages.length}`;document.getElementById('slidePrev').disabled=current===0;document.getElementById('slideNext').disabled=current===stages.length-1;}
+function navigateTo(i){
+ setStage(i);
+ if(compactRoute.matches)setRouteExpanded(false);
+ const heading=stages[current].querySelector('h2');
+ heading.setAttribute('tabindex','-1');
+ heading.focus({preventScroll:true});
+ if(body.dataset.live==='on'){
+  stages[current].scrollTop=0;
+  return;
+ }
+ // Stage sections follow the navigation immediately. Anchor the scroll to the
+ // route sentinel so the compact sticky route cannot resize and obscure a slide.
+ // The sentinel sits BEFORE the route, so its document position does not shift
+ // when the route compresses from its full height on mobile.
+ const sentinelTop=routeStart.getBoundingClientRect().top+window.scrollY;
+ window.scrollTo({top:Math.max(0,sentinelTop+2),behavior:'instant'});
+ updatePinnedRoute();
+ window.scrollTo({top:Math.max(0,routeStart.getBoundingClientRect().top+window.scrollY+2),behavior:'instant'});
+ updatePinnedRoute();
+}
+nav.forEach(b=>b.addEventListener('click',()=>navigateTo(Number(b.dataset.go))));
+document.getElementById('prev').addEventListener('click',()=>navigateTo(current-1));document.getElementById('next').addEventListener('click',()=>navigateTo(current+1));
+/* Dedicated full-screen presentation. Request native browser full screen on a real click;
+   the viewport-filling theatre remains usable if the browser denies the request. */
+const deckDock=document.getElementById('presentationDock');
+const fullStatus=document.getElementById('fullscreenStatus');
+let launchControl=null,enteredNativeFullscreen=false;
+function measureDock(){
+ if(body.dataset.live==='on')document.documentElement.style.setProperty('--presentation-dock-height',Math.ceil(deckDock.getBoundingClientRect().height)+'px');
+}
+if('ResizeObserver' in window)new ResizeObserver(measureDock).observe(deckDock);
+function exitPresentation(){
+ if(body.dataset.live!=='on')return;
+ body.dataset.live='off';deckDock.hidden=true;
+ document.documentElement.style.removeProperty('--presentation-dock-height');
+ if(document.fullscreenElement&&document.exitFullscreen)document.exitFullscreen().catch(()=>{});
+ const target=launchControl&&launchControl.isConnected?launchControl:document.getElementById('startPresentation');
+ target.focus({preventScroll:true});
+ updatePinnedRoute();
+}
+function startPresentation(event){
+ launchControl=event.currentTarget;
+ body.dataset.focus='on';document.getElementById('focus').value='on';
+ body.dataset.live='on';deckDock.hidden=false;setStage(current);measureDock();
+ fullStatus.textContent='Filling the screen · Esc to exit';
+ navigateTo(current);
+ if(document.documentElement.requestFullscreen){
+  document.documentElement.requestFullscreen().then(()=>{
+   enteredNativeFullscreen=true;
+   fullStatus.textContent='Browser full screen · Esc to exit';measureDock();
+  }).catch(()=>{
+   enteredNativeFullscreen=false;
+   fullStatus.textContent='Browser blocked full screen · press F11';
+  });
+ }else fullStatus.textContent='Browser full screen unavailable · press F11';
+}
+document.getElementById('startPresentation').addEventListener('click',startPresentation);
+document.getElementById('routePresent').addEventListener('click',startPresentation);
+document.getElementById('exitPresentation').addEventListener('click',exitPresentation);
+document.getElementById('slidePrev').addEventListener('click',()=>navigateTo(current-1));
+document.getElementById('slideNext').addEventListener('click',()=>navigateTo(current+1));
+document.addEventListener('fullscreenchange',()=>{
+ if(document.fullscreenElement){enteredNativeFullscreen=true;fullStatus.textContent='Browser full screen · Esc to exit';measureDock();}
+ else if(body.dataset.live==='on'&&enteredNativeFullscreen){enteredNativeFullscreen=false;exitPresentation();}
+});
+document.addEventListener('keydown',event=>{
+ if(body.dataset.live!=='on')return;
+ if(event.key==='Escape'){event.preventDefault();exitPresentation();return;}
+ const active=document.activeElement;
+ if(active&&active.matches('input,select,textarea,button,a,summary,[contenteditable="true"], [role="radio"], [role="slider"]'))return;
+ if(event.key==='ArrowRight'||event.key==='PageDown'){
+  event.preventDefault();navigateTo(current+1);
+ }else if(event.key==='ArrowLeft'||event.key==='PageUp'){
+  event.preventDefault();navigateTo(current-1);
+ }
+});
+
+for(const [id,key] of [['theme','theme'],['fontsize','size'],['spacing','spacing'],['focus','focus'],['presenter','presenter'],['motion','motion']]){document.getElementById(id).addEventListener('change',e=>{body.dataset[key]=e.target.value;setStage(current);});}
+document.getElementById('print').addEventListener('click',()=>window.print());
+
+function feedback(el,text,good){el.textContent=text;el.className='feedback '+(good?'good':'bad');}
+const quizzes=[...document.querySelectorAll('form.quiz')];
+quizzes.forEach(f=>f.addEventListener('submit',e=>{e.preventDefault();const fb=document.getElementById(f.dataset.name+'Feedback');const v=new FormData(f).get(f.dataset.name);if(!v){feedback(fb,'Choose an answer before checking.',false);return;}const ok=v===f.dataset.answer;feedback(fb,ok?f.dataset.good:f.dataset.bad,ok);}));
+const versions={
+ none:{label:'No function yet',fn:null},
+ alwaysFalse:{label:'return False',fn:()=>false},
+ length:{label:'len(password) >= 8',fn:p=>p.length>=8}};
+const tests=[{name:'test_short_password_rejected',input:'"abc123"',arg:'abc123',expected:false},{name:'test_eight_characters_accepted',input:'"abcd1234"',arg:'abcd1234',expected:true}];
+function run(key){const v=versions[key];const rows=tests.map(t=>{let actual,pass;if(!v.fn){actual='NameError: is_valid_password is not defined';pass=false;}else{const r=v.fn(t.arg);actual=r?'True':'False';pass=r===t.expected;}return{...t,actual,pass};});const passed=rows.filter(r=>r.pass).length;const el=document.getElementById('runnerFeedback');el.className='feedback '+(passed===2?'good':'bad');el.replaceChildren();const h=document.createElement('strong');h.textContent=v.label+': '+passed+'/2 tests passed';el.append(h);const wrap=document.createElement('div');wrap.className='result-cards';wrap.setAttribute('role','group');wrap.setAttribute('aria-label','Observed test results');rows.forEach(r=>{const c=document.createElement('section');c.className='result-card';c.dataset.result=r.pass?'pass':'fail';const t=document.createElement('h4');t.textContent=r.name+': '+(r.pass?'PASS':'FAIL');c.append(t);const dl=document.createElement('dl');for(const [a,b] of [['Input',r.input],['Expected',r.expected?'True':'False'],['Actual',r.actual]]){const dt=document.createElement('dt');dt.textContent=a;const dd=document.createElement('dd');dd.textContent=b;dl.append(dt,dd);}c.append(dl);wrap.append(c);});el.append(wrap);const note=document.createElement('p');note.textContent=key==='none'?'Both tests fail for the wrong reason: the function does not exist. Add a stub so they fail on the assertion instead.':key==='alwaysFalse'?'The simplest code passes the first test, but the second test fails. The new test forces a real length check.':'Both tests pass. This is evidence for these two cases only, not proof that the password rule, or the system, is correct and secure.';el.append(note);document.getElementById('runnerAnnouncement').textContent=v.label+': '+passed+' of 2 tests passed.';}
+document.getElementById('runNone').addEventListener('click',()=>run('none'));
+document.getElementById('runFalse').addEventListener('click',()=>run('alwaysFalse'));
+document.getElementById('runLen').addEventListener('click',()=>run('length'));
+document.getElementById('reset').addEventListener('click',()=>{if(body.dataset.live==='on')exitPresentation();quizzes.forEach(f=>{f.reset();const fb=document.getElementById(f.dataset.name+'Feedback');fb.textContent='';fb.className='feedback';});const rf=document.getElementById('runnerFeedback');rf.textContent='Not run yet. Predict first, then run.';rf.className='feedback';document.getElementById('runnerAnnouncement').textContent='Activities have been reset.';for(const [id,key,d] of [['theme','theme','light'],['fontsize','size','standard'],['spacing','spacing','standard'],['focus','focus','on'],['presenter','presenter','off'],['motion','motion','off']]){document.getElementById(id).value=d;body.dataset[key]=d;}setStage(0);document.querySelector('header').scrollIntoView({behavior:'auto'});setRouteExpanded(false);updatePinnedRoute();});
+setStage(0);
+})();
+</script>
+</body>
+</html>
